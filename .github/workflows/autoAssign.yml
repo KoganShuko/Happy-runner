@@ -31,24 +31,7 @@ jobs:
           channel_id: D01SVCMBH8A
           payload: >-
             {
-                "icon_emoji": ":rocket:",
+                "icon_emoji": ":boom:",
                 "username": "Deployer",
-                "attachments": [
-                    {
-                        "author_name": "${{ github.event.sender.login }}",
-                        "author_link": "${{ github.event.sender.html_url }}",
-                        "author_icon": "${{ github.event.sender.avatar_url }}",
-                        "color": "good",
-                        "fallback": "Deployment finished.",
-                        "pretext": "Deployment finished.",
-                        "fields": [
-                            {
-                              "title": "Revision",
-                              "value": "<https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}@${{ github.ref }}>",
-                              "short": true
-                            }
-                        ],
-                        "footer": "<https://github.com/${{ github.repository }}|${{ github.repository }}>",
-                    }
-                ]
+                "text": "Deployment failed."
             }

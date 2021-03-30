@@ -44,7 +44,10 @@ async function getRandomReviewer() {
     } = await reviewersData.json();
     reviewers.sort((prev, cur) => prev.count - cur.count);
     const activeReviewers = reviewers.filter(
-      (reviewer) => reviewer.isActive && reviewer.name !== owner
+      (reviewer) => {
+        console.log(reviewer.name, owner)
+        return reviewer.isActive && reviewer.name !== owner;
+      }
     );
     const smallestReviewCount = activeReviewers[0].count;
     const potentialReviewers = activeReviewers.filter(
