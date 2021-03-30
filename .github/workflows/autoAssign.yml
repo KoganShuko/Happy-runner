@@ -24,10 +24,9 @@ jobs:
           name: ${{ steps.getReviewer.outputs.name }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_CHANNEL: C01SSACQWJH
-          SLACK_USERNAME: PEPE
-          SLACK_MESSAGE: 'Post Content :rocket:'
+      - name: Send message to Slack API
+        uses: archive/github-actions-slack@v2.0.0
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          slack-channel: D01SVCMBH8A
+          slack-text: Hello! Event "${{ github.event_name }}" in "${{ github.repository }}" 🤓
