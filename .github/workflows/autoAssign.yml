@@ -14,7 +14,6 @@ jobs:
         with:
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
-      - run: echo ${{ github }}
       - name: Add Pull Request Reviewer
         uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
         with: 
@@ -26,8 +25,10 @@ jobs:
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
+        uses: Ilshidur/action-slack@2.0.2
         env:
           SLACK_CHANNEL: zmievskiimv
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_MESSAGE: привет! твой коммит 
+          SLACK_MESSAGE: Привет!
+          SLACK_USERNAME: Коммит-бот
+          SLACK_AVATAR: https://i.chzbgr.com/full/8334924288/hCFACD046/stock-photo-of-hide-the-pain-harold-looking-at-the-camera-with-a-pained-expression

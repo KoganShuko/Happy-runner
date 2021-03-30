@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 
 async function updateReviewerData() {
   try {
@@ -23,6 +24,7 @@ async function updateReviewerData() {
       }`,
       { headers }
     );
+    console.log(github);
     const {
       record: { reviewers },
     } = await reviewersData.json();
