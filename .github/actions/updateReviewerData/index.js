@@ -24,7 +24,7 @@ async function updateReviewerData() {
       }`,
       { headers }
     );
-    console.log(github, github.context.payload.pull_request);
+    console.log(github.context.payload.pull_request);
     const {
       record: { reviewers },
     } = await reviewersData.json();
