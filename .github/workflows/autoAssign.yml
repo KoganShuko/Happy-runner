@@ -24,9 +24,11 @@ jobs:
           name: ${{ steps.getReviewer.outputs.name }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
-      - name: Send message to Slack API
-        uses: archive/github-actions-slack@v2.0.0
+      - name: Slack notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
+          SLACK_USERNAME: PEPE
+          SLACK_CHANNEL: D01SVCMBH8A
+        uses: Ilshidur/action-slack@2.0.2
         with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_BOT_TOKEN }}
-          slack-channel: D01SVCMBH8A
-          slack-text: Hello! Event "${{ github.event_name }}" in "${{ github.repository }}" 🤓
+          args: 'Привет. ${{ github.context.payload.pull_request._links.html }}'
