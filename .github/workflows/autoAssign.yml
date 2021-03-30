@@ -24,12 +24,9 @@ jobs:
           name: ${{ steps.getReviewer.outputs.name }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
-      - name: Slack Notification
-        uses: Ilshidur/action-slack@2.0.2
+     - name: Notify slack
         env:
-          SLACK_CHANNEL: zmievskiimv
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_USERNAME: Коммит-бот
-          SLACK_AVATAR: https://i.chzbgr.com/full/8334924288/hCFACD046/stock-photo-of-hide-the-pain-harold-looking-at-the-camera-with-a-pained-expression
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: pullreminders/slack-action@master
         with:
-          args: 'Привет! ${{ github.context.ref }} :harold:'
+          args: '{\"channel\":\"C01SSACQWJH\",\"Привет ${{ github.context.payload.pull_request._links.html }}\":\"Hello world\"}'
