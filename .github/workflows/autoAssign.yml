@@ -25,10 +25,30 @@ jobs:
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - name: Slack notification
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_USERNAME: PEPE
-          SLACK_CHANNEL: D01SVCMBH8A
-        uses: Ilshidur/action-slack@2.0.2
+        uses: wearerequired/slack-messaging-action@v1
         with:
-          args: 'Привет. ${{ github.context.payload.pull_request._links.html }}'
+          bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel: deployments
+          payload: >-
+            {
+                "icon_emoji": ":rocket:",
+                "username": "Deployer",
+                "attachments": [
+                    {
+                        "author_name": "${{ github.event.sender.login }}",
+                        "author_link": "${{ github.event.sender.html_url }}",
+                        "author_icon": "${{ github.event.sender.avatar_url }}",
+                        "color": "good",
+                        "fallback": "Deployment finished.",
+                        "pretext": "Deployment finished.",
+                        "fields": [
+                            {
+                              "title": "Revision",
+                              "value": "<https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}@${{ github.ref }}>",
+                              "short": true
+                            }
+                        ],
+                        "footer": "<https://github.com/${{ github.repository }}|${{ github.repository }}>",
+                    }
+                ]
+            }
