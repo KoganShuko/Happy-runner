@@ -39,7 +39,7 @@ async function updateReviewerData() {
       }`,
       { headers }
     );
-    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_2__, _actions_github__WEBPACK_IMPORTED_MODULE_2__.context.payload.pull_request);
+    console.log(name);
     const {
       record: { reviewers },
     } = await reviewersData.json();

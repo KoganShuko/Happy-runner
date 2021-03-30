@@ -36,6 +36,7 @@ async function getRandomReviewer() {
       (reviewer) => reviewer.count === smallestReviewCount
     );
     const { name } = _.shuffle(potentialReviewers)[0];
+    console.log(name);
     core.setOutput('name', name);
   } catch (e) {
     core.setFailed(e);
