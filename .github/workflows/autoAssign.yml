@@ -27,6 +27,7 @@ jobs:
       - name: Notify slack
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        uses: pullreminders/slack-action@master
+        uses: voxmedia/github-action-slack-notify-build@v1
         with:
-          args: '{\"channel\":\"C01SSACQWJH\",\"Привет\":\"Hello world\"}'
+          channel: C01SSACQWJH
+          color: good
