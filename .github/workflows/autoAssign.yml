@@ -29,6 +29,7 @@ jobs:
         env:
           SLACK_CHANNEL: zmievskiimv
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_MESSAGE: Привет!
           SLACK_USERNAME: Коммит-бот
           SLACK_AVATAR: https://i.chzbgr.com/full/8334924288/hCFACD046/stock-photo-of-hide-the-pain-harold-looking-at-the-camera-with-a-pained-expression
+        with:
+          args: 'Привет! ${{ github.context.ref }} :harold:'
