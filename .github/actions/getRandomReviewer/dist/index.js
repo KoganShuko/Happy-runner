@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(131);
+/******/ 		return __webpack_require__(580);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -51,55 +51,15 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ 131:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+/***/ 247:
+/***/ (function(module) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(890);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(238);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-async function updateReviewerData() {
-  try {
-    const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageId');
-    const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageToken');
-    const name = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('name');
-    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/versions/count`, { headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': storageKey,
-    }});
-    const { metaData: { versionCount }} = await jsonVersionData.json();
-    const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/${versionCount === 0 ? '' : versionCount}`, { headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': storageKey,
-    }});
-    const { record: { reviewers }} = await reviewersData.json();
-    const index = reviewers.findIndex((reviewer) => reviewer.name === name);
-    reviewers[index].count += 1;
-    const updatedData = { reviewers: [...reviewers]};
-    await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}`, {
-      method: 'PUT',
-      body: JSON.stringify(updatedData),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': storageKey,
-      }
-    });
-  } catch (e) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(e);
-  }
-}
-
-updateReviewerData();
+module.exports = eval("require")("lodash");
 
 
 /***/ }),
 
-/***/ 238:
+/***/ 395:
 /***/ (function(module) {
 
 module.exports = eval("require")("@actions/core");
@@ -107,7 +67,54 @@ module.exports = eval("require")("@actions/core");
 
 /***/ }),
 
-/***/ 890:
+/***/ 580:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(690);
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(247);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(395);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+async function getRandomReviewer() {
+  try {
+    const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageId');
+    const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageToken');
+    const headers = {
+      'Content-Type': 'application/json',
+      'X-Master-Key': storageKey,
+    };
+    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/versions/count`, { headers });
+    const { metaData: { versionCount }} = await jsonVersionData.json();
+    const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/${versionCount === 0 ? '' : versionCount}`, { headers });
+    const { record: { reviewers }} = await reviewersData.json();
+    reviewers.sort((prev, cur) => prev.count - cur.count);
+    const activeReviewers = reviewers.filter(
+      (reviewer) => reviewer.isActive,
+      );
+    const smallestReviewCount = activeReviewers[0].count;
+    const potentialReviewers = activeReviewers.filter(
+      (reviewer) => reviewer.count === smallestReviewCount,
+    );
+    const { name } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
+    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('name', name);
+  } catch (e) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(e);
+  }
+}
+
+getRandomReviewer();
+
+
+/***/ }),
+
+/***/ 690:
 /***/ (function(module) {
 
 module.exports = eval("require")("node-fetch");

@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(647);
+/******/ 		return __webpack_require__(991);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -51,7 +51,7 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ 91:
+/***/ 47:
 /***/ (function(module) {
 
 module.exports = eval("require")("node-fetch");
@@ -59,54 +59,7 @@ module.exports = eval("require")("node-fetch");
 
 /***/ }),
 
-/***/ 647:
-/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(91);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(758);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(742);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-async function getRandomReviewer() {
-  try {
-    const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageId');
-    const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageToken');
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Master-Key': storageKey,
-    };
-    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/versions/count`, { headers });
-    const { metaData: { versionCount }} = await jsonVersionData.json();
-    const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/${versionCount === 0 ? '' : versionCount}`, { headers });
-    const { record: { reviewers }} = await reviewersData.json();
-    reviewers.sort((prev, cur) => prev.count - cur.count);
-    const activeReviewers = reviewers.filter(
-      (reviewer) => reviewer.isActive,
-      );
-    const smallestReviewCount = activeReviewers[0].count;
-    const potentialReviewers = activeReviewers.filter(
-      (reviewer) => reviewer.count === smallestReviewCount,
-    );
-    const { name } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('name', name);
-  } catch (e) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(e);
-  }
-}
-
-getRandomReviewer();
-
-
-/***/ }),
-
-/***/ 742:
+/***/ 940:
 /***/ (function(module) {
 
 module.exports = eval("require")("@actions/core");
@@ -114,10 +67,50 @@ module.exports = eval("require")("@actions/core");
 
 /***/ }),
 
-/***/ 758:
-/***/ (function(module) {
+/***/ 991:
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
 
-module.exports = eval("require")("lodash");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
+/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(940);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+async function updateReviewerData() {
+  try {
+    const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageId');
+    const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageToken');
+    const name = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('name');
+    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/versions/count`, { headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': storageKey,
+    }});
+    const { metaData: { versionCount }} = await jsonVersionData.json();
+    const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}/${versionCount === 0 ? '' : versionCount}`, { headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': storageKey,
+    }});
+    const { record: { reviewers }} = await reviewersData.json();
+    const index = reviewers.findIndex((reviewer) => reviewer.name === name);
+    reviewers[index].count += 1;
+    const updatedData = { reviewers: [...reviewers]};
+    await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updatedData),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': storageKey,
+      }
+    });
+  } catch (e) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(e);
+  }
+}
+
+updateReviewerData();
 
 
 /***/ })
