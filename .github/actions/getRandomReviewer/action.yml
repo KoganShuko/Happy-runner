@@ -7,6 +7,9 @@ inputs:
   storageToken:
     description: token for storage
     required: true
+  owner:
+    description: pull request owner
+    required: true
 outputs:
   name:
     description: next reviewer
