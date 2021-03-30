@@ -1,6 +1,6 @@
 on:
   pull_request:
-    types: [assigned]
+    types: [review_requested]
 
 jobs:
   autoAssign:
