@@ -20,3 +20,8 @@ jobs:
         with: 
           reviewers: ${{ steps.getReviewer.outputs.name }}
           token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ./.github/actions/updateReviewerData
+        with:
+          name: ${{ steps.getReviewer.outputs.name }}
+          storageId: 60633ec918592d461f0363e8
+          storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
