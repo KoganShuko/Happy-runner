@@ -27,7 +27,7 @@ jobs:
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
           SLACK_CHANNEL: C01SSACQWJH
           SLACK_USERNAME: PEPE
           SLACK_MESSAGE: 'Post Content :rocket:'
