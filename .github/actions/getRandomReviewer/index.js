@@ -11,17 +11,8 @@ async function getRandomReviewer() {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
     };
-    const jsonVersionData = await fetch(
-      `https://api.jsonbin.io/v3/b/${storageId}/versions/count`,
-      { headers }
-    );
-    const {
-      metaData: { versionCount },
-    } = await jsonVersionData.json();
     const reviewersData = await fetch(
-      `https://api.jsonbin.io/v3/b/${storageId}/${
-        versionCount === 0 ? '' : versionCount
-      }`,
+      `https://api.jsonbin.io/v3/b/${storageId}/latest`,
       { headers }
     );
     const {
@@ -38,9 +29,10 @@ async function getRandomReviewer() {
     const potentialReviewers = activeReviewers.filter(
       (reviewer) => reviewer.count === smallestReviewCount
     );
-    const { name } = _.shuffle(potentialReviewers)[0];
+    const { name, slackId } = _.shuffle(potentialReviewers)[0];
     console.log(name);
     core.setOutput('name', name);
+    core.setOutput('slackId', slackId);
   } catch (e) {
     core.setFailed(e);
   }

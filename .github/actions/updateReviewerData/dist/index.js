@@ -26,17 +26,8 @@ async function updateReviewerData() {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
     };
-    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(
-      `https://api.jsonbin.io/v3/b/${storageId}/versions/count`,
-      { headers }
-    );
-    const {
-      metaData: { versionCount },
-    } = await jsonVersionData.json();
     const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(
-      `https://api.jsonbin.io/v3/b/${storageId}/${
-        versionCount === 0 ? '' : versionCount
-      }`,
+      `https://api.jsonbin.io/v3/b/${storageId}/latest`,
       { headers }
     );
     console.log(name);

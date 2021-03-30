@@ -26,17 +26,8 @@ async function getRandomReviewer() {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
     };
-    const jsonVersionData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(
-      `https://api.jsonbin.io/v3/b/${storageId}/versions/count`,
-      { headers }
-    );
-    const {
-      metaData: { versionCount },
-    } = await jsonVersionData.json();
     const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(
-      `https://api.jsonbin.io/v3/b/${storageId}/${
-        versionCount === 0 ? '' : versionCount
-      }`,
+      `https://api.jsonbin.io/v3/b/${storageId}/latest`,
       { headers }
     );
     const {
@@ -53,9 +44,10 @@ async function getRandomReviewer() {
     const potentialReviewers = activeReviewers.filter(
       (reviewer) => reviewer.count === smallestReviewCount
     );
-    const { name } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
+    const { name, slackId } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
     console.log(name);
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('name', name);
+    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('slackId', slackId);
   } catch (e) {
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(e);
   }
