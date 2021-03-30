@@ -1,0 +1,15 @@
+name: Get random reviewer
+description: Get random reviewer based on review count
+inputs:
+  storageId:
+    description: json storage id of reviewers data
+    required: true
+  storageToken:
+    description: token for storage
+    required: true
+outputs:
+  name:
+    description: next reviewer
+runs:
+  using: 'node14'
+  main: 'index.js'

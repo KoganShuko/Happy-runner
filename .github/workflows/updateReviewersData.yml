@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    types: [assigned]
+
+jobs:
+  autoAssign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/updateReviewerData
+        with:
+          name: ${{ github.actor }}
+          storageId: 60633ec918592d461f0363e8
+          storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau

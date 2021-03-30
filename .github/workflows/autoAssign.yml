@@ -1,0 +1,21 @@
+name: Reviewer auto assign
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  autoAssign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/getRandomReviewer
+        id: getReviewer
+        with:
+          storageId: 60633ec918592d461f0363e8
+          storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
+      - name: Add Pull Request Reviewer
+        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
+        with: 
+          reviewers: ${{ steps.hello.outputs.name }}
+          token: ${{ secrets.GITHUB_TOKEN }}

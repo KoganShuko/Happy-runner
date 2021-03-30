@@ -1,0 +1,15 @@
+name: Update reviewers data
+description: Increase reviewer count
+inputs:
+  name:
+    description: Reviewer name
+    required: true
+  storageId:
+    description: json storage id of reviewers data
+    required: true
+  storageToken:
+    description: token for storage
+    required: true
+runs:
+  using: 'node14'
+  main: 'index.js'
