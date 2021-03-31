@@ -13,7 +13,6 @@ jobs:
         id: getReviewer
         with:
           owner: ${{ github.actor }}
-          git: ${{ github }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - name: Add Pull Request Reviewer

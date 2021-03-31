@@ -13,6 +13,9 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(218);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(177);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -22,8 +25,7 @@ async function getRandomReviewer() {
     const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageId');
     const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageToken');
     const owner = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('owner');
-    const github = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('github');
-    console.log(github)
+    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_3__)
     const headers = {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
@@ -17283,6 +17285,14 @@ getRandomReviewer();
 /***/ ((module) => {
 
 module.exports = eval("require")("@actions/core");
+
+
+/***/ }),
+
+/***/ 177:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
 
 
 /***/ }),

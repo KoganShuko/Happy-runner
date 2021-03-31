@@ -10,9 +10,6 @@ inputs:
   owner:
     description: pull request owner
     required: true
-  git:
-    description: git
-
 outputs:
   name:
     description: next reviewer

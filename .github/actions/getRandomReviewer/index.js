@@ -1,13 +1,13 @@
 import fetch from 'node-fetch';
 import _ from 'lodash';
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 
 async function getRandomReviewer() {
   try {
     const storageId = core.getInput('storageId');
     const storageKey = core.getInput('storageToken');
     const owner = core.getInput('owner');
-    const github = core.getInput('github');
     console.log(github)
     const headers = {
       'Content-Type': 'application/json',
