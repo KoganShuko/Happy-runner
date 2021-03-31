@@ -10,6 +10,9 @@ inputs:
   storageToken:
     description: token for storage
     required: true
+  mode:
+    description: add review or reset all
+    default: add
 runs:
   using: 'docker'
   image: 'Dockerfile'
