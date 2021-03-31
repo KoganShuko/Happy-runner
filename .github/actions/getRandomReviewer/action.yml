@@ -16,5 +16,5 @@ outputs:
   slackId:
     description: slack id
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'

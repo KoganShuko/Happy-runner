@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const core = require('@actions/core');
+import fetch from 'node-fetch';
+import * as core from '@actions/core';
 
 async function updateReviewerData() {
   try {

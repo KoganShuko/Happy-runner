@@ -26,6 +26,8 @@ jobs:
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - uses: kceb/pull-request-url-action@v1
+        with: ${{ secrets.GITHUB_TOKEN }}
+          github-oauth-token: 
         id: pr-url
       - name: Slack notification
         env:
