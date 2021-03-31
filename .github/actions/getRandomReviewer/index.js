@@ -8,7 +8,7 @@ async function getRandomReviewer() {
     const storageId = core.getInput('storageId');
     const storageKey = core.getInput('storageToken');
     const owner = core.getInput('owner');
-    console.log(github)
+    console.log(github.context.payload.pull_request)
     const headers = {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
