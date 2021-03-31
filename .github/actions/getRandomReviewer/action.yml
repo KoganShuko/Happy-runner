@@ -14,6 +14,7 @@ outputs:
   name:
     description: next reviewer
   slackId:
+    description: slack id
 runs:
   using: 'node12'
   main: 'dist/index.js'
