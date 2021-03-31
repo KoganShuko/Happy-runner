@@ -25,17 +25,21 @@ async function updateReviewerData() {
     } = await reviewersData.json();
 
     let updatedData = reviewers;
+    console.log(mode);
     if (mode === modes.add) {
+      console.log('1');
       const index = reviewers.findIndex((reviewer) => reviewer.name === name);
       reviewers[index].count += 1;
-      updatedData = { reviewers: [...reviewers] };
     } else if (mode === modes.reset) {
+      console.log('2');
       updatedData = reviewers.map((reviewer, index) => {
+        console.log(index)
         reviewers[index].count = 0;
         return reviewer;
       });
     }
-
+    
+    updatedData = { reviewers: [...reviewers] };
     await fetch(`https://api.jsonbin.io/v3/b/${storageId}`, {
       method: 'PUT',
       body: JSON.stringify(updatedData),
