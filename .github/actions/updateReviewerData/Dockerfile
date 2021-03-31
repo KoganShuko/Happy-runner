@@ -1,5 +1,5 @@
-FROM node:15
+FROM node:12-alpine3.10
 COPY package.json .
 RUN yarn
 COPY . .
-CMD node ./dist/index.js
+CMD node /dist/index.js
