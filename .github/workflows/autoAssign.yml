@@ -28,7 +28,6 @@ jobs:
       - run: echo ${{ github.event }}
       - run: echo ${{ github.event.html }}
       - run: echo ${{ github.actor }}
-      - run: echo ${{ context }}
       - name: Slack notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
