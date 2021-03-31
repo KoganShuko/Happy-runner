@@ -12,7 +12,7 @@ jobs:
       - uses: ./.github/actions/getRandomReviewer
         id: getReviewer
         with:
-          owner: ${{ github.owner }}
+          owner: ${{ github.actor }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - name: Add Pull Request Reviewer
@@ -25,14 +25,13 @@ jobs:
           name: ${{ steps.getReviewer.outputs.name }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
-      - run: echo ${{ github }}
-      - run: echo ${{ github.context.actor }}
-      - run: echo ${{ github.context }}
-      - run: echo ${{ github.context.payload }}
-      - run: echo ${{ github.context.payload.pull_request }}
+      - run: echo ${{ github.event }}
+      - run: echo ${{ github.event.html }}
+      - run: echo ${{ github.actor }}
+      - run: echo ${{ context }}
       - name: Slack notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Пул реквест ждет проверки ${{ github.context.payload.pull_request._links.html }}\"}'
+          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Пул реквест ждет проверки ${{ github.event.html }}\"}'
