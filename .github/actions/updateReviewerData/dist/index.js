@@ -14,11 +14,17 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 
+const modes = {
+  add: 'add',
+  reset: 'reset',
+};
+
 async function updateReviewerData() {
   try {
     const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageId');
     const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('storageToken');
     const name = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('name');
+    const mode = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('mode');
     const headers = {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
@@ -30,10 +36,23 @@ async function updateReviewerData() {
     const {
       record: { reviewers },
     } = await reviewersData.json();
-    const index = reviewers.findIndex((reviewer) => reviewer.name === name);
-    reviewers[index].count += 1;
-    const updatedData = { reviewers: [...reviewers] };
-    console.log(name)
+
+    let updatedData = reviewers;
+    console.log(mode);
+    if (mode === modes.add) {
+      console.log('1');
+      const index = reviewers.findIndex((reviewer) => reviewer.name === name);
+      reviewers[index].count += 1;
+    } else if (mode === modes.reset) {
+      console.log('2');
+      updatedData = reviewers.map((reviewer, index) => {
+        console.log(index)
+        reviewers[index].count = 0;
+        return reviewer;
+      });
+    }
+    
+    updatedData = { reviewers: [...reviewers] };
     await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}`, {
       method: 'PUT',
       body: JSON.stringify(updatedData),
