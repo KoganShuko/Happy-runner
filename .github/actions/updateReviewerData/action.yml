@@ -3,7 +3,6 @@ description: Increase reviewer count
 inputs:
   name:
     description: Reviewer name
-    required: true
   storageId:
     description: json storage id of reviewers data
     required: true
