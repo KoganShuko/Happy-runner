@@ -29,6 +29,18 @@ jobs:
         with:
           github-oauth-token: ${{ secrets.GITHUB_TOKEN }} 
         id: pr-url
+      - run: echo "${{ github }}"
+      - uses: 8BitJonny/gh-get-current-pr@v1
+        id: PR
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          filterOutClosed: true
+      - run: echo "Your PR is ${prNumber} and its JSON is ${prJSON}"
+        if: success() && steps.PR.outputs.number
+        env:
+          prNumber: ${{ steps.PR.outputs.number }}
+          // JSON object with the full PR object
+          prJSON: ${{ steps.PR.outputs.pr }
       - name: Slack notification
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
