@@ -6,9 +6,11 @@ on:
 
 jobs:
   resetReviews:
-    - uses: actions/checkout@v2
-    - uses: ./.github/actions/updateReviewerData
-      with:
-        mode: reset
-        storageId: 60649e82418f307e2586232e
-        storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/updateReviewerData
+        with:
+          mode: reset
+          storageId: 60649e82418f307e2586232e
+          storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
