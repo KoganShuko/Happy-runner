@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 
 async function updateReviewerData() {
   try {
