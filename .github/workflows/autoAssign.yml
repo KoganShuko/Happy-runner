@@ -30,4 +30,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Пул реквест ждет проверки https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.html }} ${{ github.event.pull_request.number }} ${{ github.event.number }}\"}'
+          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Пул реквест ждет проверки https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }} :rocket:\"}'
