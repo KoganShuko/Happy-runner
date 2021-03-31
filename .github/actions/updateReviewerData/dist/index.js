@@ -36,7 +36,7 @@ async function updateReviewerData() {
     const index = reviewers.findIndex((reviewer) => reviewer.name === name);
     reviewers[index].count += 1;
     const updatedData = { reviewers: [...reviewers] };
-    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_2__)
+    console.log(name)
     await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`https://api.jsonbin.io/v3/b/${storageId}`, {
       method: 'PUT',
       body: JSON.stringify(updatedData),
