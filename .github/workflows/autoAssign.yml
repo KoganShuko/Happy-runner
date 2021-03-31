@@ -12,6 +12,7 @@ jobs:
       - uses: ./.github/actions/getRandomReviewer
         id: getReviewer
         with:
+          owner: ${{ github.owner }}
           storageId: 60633ec918592d461f0363e8
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
       - name: Add Pull Request Reviewer
@@ -29,4 +30,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Hello world\"}'
+          args: '{\"channel\":\"${{ steps.getReviewer.outputs.slackId }}\",\"text\":\"Пул реквест ждет проверки ${{ github.context.payload.pull_request, github.context.payload.pull_request._links.html }}\"}'

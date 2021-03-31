@@ -36,7 +36,7 @@ async function getRandomReviewer() {
     reviewers.sort((prev, cur) => prev.count - cur.count);
     const activeReviewers = reviewers.filter(
       (reviewer) => {
-        console.log(reviewer.name, owner)
+        console.log('eviewer.name', reviewer.name, 'owner', owner)
         return reviewer.isActive && reviewer.name !== owner;
       }
     );
@@ -45,7 +45,7 @@ async function getRandomReviewer() {
       (reviewer) => reviewer.count === smallestReviewCount
     );
     const { name, slackId } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
-    console.log(name);
+    console.log(name, 'YO');
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('name', name);
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('slackId', slackId);
   } catch (e) {

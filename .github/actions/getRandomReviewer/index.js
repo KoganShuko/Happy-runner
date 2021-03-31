@@ -21,7 +21,7 @@ async function getRandomReviewer() {
     reviewers.sort((prev, cur) => prev.count - cur.count);
     const activeReviewers = reviewers.filter(
       (reviewer) => {
-        console.log(reviewer.name, owner)
+        console.log('eviewer.name', reviewer.name, 'owner', owner)
         return reviewer.isActive && reviewer.name !== owner;
       }
     );
@@ -30,7 +30,7 @@ async function getRandomReviewer() {
       (reviewer) => reviewer.count === smallestReviewCount
     );
     const { name, slackId } = _.shuffle(potentialReviewers)[0];
-    console.log(name);
+    console.log(name, 'YO');
     core.setOutput('name', name);
     core.setOutput('slackId', slackId);
   } catch (e) {

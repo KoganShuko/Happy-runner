@@ -15,7 +15,6 @@ async function updateReviewerData() {
       `https://api.jsonbin.io/v3/b/${storageId}/latest`,
       { headers }
     );
-    console.log(name);
     const {
       record: { reviewers },
     } = await reviewersData.json();
