@@ -25,7 +25,7 @@ async function getRandomReviewer() {
     const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageId');
     const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageToken');
     const owner = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('owner');
-    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_3__)
+    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.pull_request)
     const headers = {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
