@@ -15,6 +15,12 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(177);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(6);
+/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_request__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(505);
+/* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_graphql__WEBPACK_IMPORTED_MODULE_5__);
+
+
 
 
 
@@ -22,15 +28,35 @@ __nccwpck_require__.r(__webpack_exports__);
 
 async function getRandomReviewer() {
   try {
-    const storageId = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageId');
-    const storageKey = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('storageToken');
-    const owner = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('owner');
-    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_3__.context.payload.pull_request)
+    const pulls = await octokit.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+      owner: 'KoganShuko',
+      repo: 'Happy-runner'
+    });
+    console.log(pulls);
+
+    const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__(
+     ` {
+        search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
+          edges {
+            node {
+              ... on PullRequest {
+                requested_reviewers
+              }
+            }
+          }
+        }
+      }`
+    )
+    console.log(pulls2);
+   /*  const storageId = core.getInput('storageId');
+    const storageKey = core.getInput('storageToken');
+    const owner = core.getInput('owner');
+    console.log(github);
     const headers = {
       'Content-Type': 'application/json',
       'X-Master-Key': storageKey,
     };
-    const reviewersData = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(
+    const reviewersData = await fetch(
       `https://api.jsonbin.io/v3/b/${storageId}/latest`,
       { headers }
     );
@@ -50,10 +76,10 @@ async function getRandomReviewer() {
       (reviewer) => reviewer.count === smallestReviewCount
     );
     console.log(potentialReviewers, 'potentialReviewers');
-    const { name, slackId } = lodash__WEBPACK_IMPORTED_MODULE_1___default().shuffle(potentialReviewers)[0];
+    const { name, slackId } = _.shuffle(potentialReviewers)[0];
     console.log(name, 'YO');
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('name', name);
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setOutput('slackId', slackId);
+    core.setOutput('name', name);
+    core.setOutput('slackId', slackId); */
   } catch (e) {
     _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(e);
   }
@@ -17293,6 +17319,22 @@ module.exports = eval("require")("@actions/core");
 /***/ ((module) => {
 
 module.exports = eval("require")("@actions/github");
+
+
+/***/ }),
+
+/***/ 505:
+/***/ ((module) => {
+
+module.exports = eval("require")("@octokit/graphql");
+
+
+/***/ }),
+
+/***/ 6:
+/***/ ((module) => {
+
+module.exports = eval("require")("@octokit/request");
 
 
 /***/ }),
