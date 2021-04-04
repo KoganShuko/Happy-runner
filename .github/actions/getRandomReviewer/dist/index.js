@@ -60,6 +60,7 @@ async function getRandomReviewer() {
                       }
                     }
                   }
+                  title
                   reviews(last: 10) {
                     nodes {
                       author {
@@ -80,6 +81,7 @@ async function getRandomReviewer() {
      )
      pulls2.search.edges.forEach((pull) => {
        console.log(pull);
+       console.log(pull.node.reviewRequests.nodes);
 
      })
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
