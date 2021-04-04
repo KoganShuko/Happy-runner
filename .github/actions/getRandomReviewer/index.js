@@ -27,10 +27,14 @@ async function getRandomReviewer() {
            edges {
              node {
                ... on PullRequest {
-                  author {
-                    login
+                  reviews(last: 10) {
+                    totalCount
+                    nodes {
+                      author {
+                        login
+                      }
+                    }
                   }
-                  requestedReviewer
                }
              }
            }
