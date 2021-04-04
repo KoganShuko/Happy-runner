@@ -4,10 +4,22 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import * as request from '@octokit/request';
 import * as graphql from '@octokit/graphql';
+import Octokit from '@octokit/rest';
 
 async function getRandomReviewer() {
   try {
-    const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+    const token = core.getInput('token')
+    let pr = new github.GitHub(token)
+    let resp = pr.pulls.list({
+        owner: repoOwner,
+        repo: repo,
+    }).catch(
+        e => {
+            console.log(e.message)
+        }
+    )
+    console.log(resp);
+   /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
     });
@@ -26,7 +38,7 @@ async function getRandomReviewer() {
         }
       }`
     )
-    console.log(pulls2);
+    console.log(pulls2); */
    /*  const storageId = core.getInput('storageId');
     const storageKey = core.getInput('storageToken');
     const owner = core.getInput('owner');

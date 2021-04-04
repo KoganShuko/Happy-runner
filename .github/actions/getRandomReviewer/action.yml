@@ -10,6 +10,9 @@ inputs:
   owner:
     description: pull request owner
     required: true
+  token:
+    description: lala
+    required: true
 outputs:
   name:
     description: next reviewer

@@ -19,6 +19,9 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_request__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(505);
 /* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_graphql__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _octokit_rest__WEBPACK_IMPORTED_MODULE_6__ = __nccwpck_require__(767);
+/* harmony import */ var _octokit_rest__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_rest__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -28,13 +31,24 @@ __nccwpck_require__.r(__webpack_exports__);
 
 async function getRandomReviewer() {
   try {
-    const pulls = await _octokit_request__WEBPACK_IMPORTED_MODULE_4__.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+    const token = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('token')
+    let pr = new _actions_github__WEBPACK_IMPORTED_MODULE_3__.GitHub(token)
+    let resp = pr.pulls.list({
+        owner: repoOwner,
+        repo: repo,
+    }).catch(
+        e => {
+            console.log(e.message)
+        }
+    )
+    console.log(resp);
+   /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
     });
     console.log(pulls);
 
-    const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
+    const pulls2 = await graphql.graphql(
      ` {
         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
           edges {
@@ -47,7 +61,7 @@ async function getRandomReviewer() {
         }
       }`
     )
-    console.log(pulls2);
+    console.log(pulls2); */
    /*  const storageId = core.getInput('storageId');
     const storageKey = core.getInput('storageToken');
     const owner = core.getInput('owner');
@@ -17335,6 +17349,14 @@ module.exports = eval("require")("@octokit/graphql");
 /***/ ((module) => {
 
 module.exports = eval("require")("@octokit/request");
+
+
+/***/ }),
+
+/***/ 767:
+/***/ ((module) => {
+
+module.exports = eval("require")("@octokit/rest");
 
 
 /***/ }),

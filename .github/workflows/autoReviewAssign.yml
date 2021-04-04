@@ -14,4 +14,5 @@ jobs:
           owner: ${{ github.actor }}
           storageId: 60649e82418f307e2586232e
           storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
+          token: ${{ secrets.GITHUB_TOKEN }}
      
