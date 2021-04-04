@@ -22,9 +22,10 @@ async function getRandomReviewer() {
     console.log(resp); */
 
 const date = new Date();
+console.log(date)
     const pulls2 = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${date}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:=${date}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
