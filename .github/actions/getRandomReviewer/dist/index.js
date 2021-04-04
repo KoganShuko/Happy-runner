@@ -44,9 +44,10 @@ async function getRandomReviewer() {
     )
     console.log(resp); */
 
+const date = new Date();
     const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${date}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
