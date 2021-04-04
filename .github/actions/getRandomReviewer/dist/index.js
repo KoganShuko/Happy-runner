@@ -64,7 +64,10 @@ async function getRandomReviewer() {
          },
        }
      )
-     console.log(pulls2);
+     pulls2.forEach((pull) => {
+       console.log(pulls);
+
+     })
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
