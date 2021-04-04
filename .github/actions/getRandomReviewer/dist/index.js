@@ -28,7 +28,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 async function getRandomReviewer() {
   try {
-    const pulls = await _octokit_request__WEBPACK_IMPORTED_MODULE_4__('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+    const pulls = await _octokit_request__WEBPACK_IMPORTED_MODULE_4__.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
     });
