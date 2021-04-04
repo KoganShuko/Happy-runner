@@ -13,7 +13,7 @@ import {
   HeavenlyBodySettings,
 } from './types';
 import { Ground, LayerFactory, MovableLayer } from './containers';
-
+console.log('YO');
 export function main(app: PIXI.Application): void {
   const worldSettings = {
     gravity: 1,
