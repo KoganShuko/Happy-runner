@@ -34,7 +34,7 @@ async function getRandomReviewer() {
     });
     console.log(pulls);
 
-    const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__(
+    const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
      ` {
         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
           edges {

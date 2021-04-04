@@ -13,7 +13,7 @@ async function getRandomReviewer() {
     });
     console.log(pulls);
 
-    const pulls2 = await graphql(
+    const pulls2 = await graphql.graphql(
      ` {
         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
           edges {
