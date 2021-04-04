@@ -51,7 +51,6 @@ async function getRandomReviewer() {
              node {
                ... on PullRequest {
                   reviews(last: 10) {
-                    totalCount
                     nodes {
                       author {
                         login
@@ -70,7 +69,7 @@ async function getRandomReviewer() {
        }
      )
      pulls2.search.edges.forEach((pull) => {
-       console.log(pull);
+       console.log(pull.node.review.node);
 
      })
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
