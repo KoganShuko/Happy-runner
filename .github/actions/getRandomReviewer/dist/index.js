@@ -79,7 +79,7 @@ async function getRandomReviewer() {
        }
      )
      pulls2.search.edges.forEach((pull) => {
-       console.log(pull.node.reviews.node);
+       console.log(pull);
 
      })
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
