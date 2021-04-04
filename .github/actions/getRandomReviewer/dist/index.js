@@ -53,6 +53,7 @@ async function getRandomReviewer() {
                   author {
                     login
                   }
+                  requestedReviewer
                }
              }
            }
