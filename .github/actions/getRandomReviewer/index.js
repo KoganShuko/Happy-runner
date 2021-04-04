@@ -7,7 +7,7 @@ import * as graphql from '@octokit/graphql';
 
 async function getRandomReviewer() {
   try {
-    const pulls = await octokit.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+    const pulls = await request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
     });
