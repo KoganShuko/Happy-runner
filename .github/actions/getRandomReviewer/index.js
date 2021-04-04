@@ -41,7 +41,7 @@ async function getRandomReviewer() {
          },
        }
      )
-     pulls2.forEach((pull) => {
+     pulls2.search.edges.forEach((pull) => {
        console.log(pulls);
 
      })
