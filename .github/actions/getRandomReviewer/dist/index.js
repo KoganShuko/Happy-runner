@@ -50,7 +50,9 @@ async function getRandomReviewer() {
            edges {
              node {
                ... on PullRequest {
-                 requested_reviewers
+                  author {
+                    login
+                  }
                }
              }
            }
