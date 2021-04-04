@@ -44,7 +44,7 @@ async function getRandomReviewer() {
     )
     console.log(resp); */
 
-const date = new Date();
+const date = new Date('YYYY-MM-DD');
 console.log(date)
     const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
       ` {
