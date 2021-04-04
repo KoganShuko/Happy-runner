@@ -27,16 +27,16 @@ async function getRandomReviewer() {
            edges {
              node {
                ... on PullRequest {
-                  <font color="#FF0000">reviewRequests(first: 100) {</font>
-                  <font color="#FF0000"> nodes {</font>
-                  <font color="#FF0000"> requestedReviewer {</font>
-                  <font color="#FF0000"> ... on User {</font>
-                  <font color="#FF0000"> name</font>
-                  <font color="#FF0000"> login</font>
-                  <font color="#FF0000"> }</font>
-                  <font color="#FF0000"> }</font>
-                  <font color="#FF0000"> }</font>
-                  <font color="#FF0000"> } </font> }
+                  reviewRequests(first: 100) {
+                    nodes {
+                      requestedReviewer {
+                        ... on User {
+                          name
+                          login
+                        }
+                      }
+                    }
+                  }
                   reviews(last: 10) {
                     nodes {
                       author {
