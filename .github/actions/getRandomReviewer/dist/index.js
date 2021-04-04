@@ -50,6 +50,16 @@ async function getRandomReviewer() {
            edges {
              node {
                ... on PullRequest {
+                  <font color="#FF0000">reviewRequests(first: 100) {</font>
+                  <font color="#FF0000"> nodes {</font>
+                  <font color="#FF0000"> requestedReviewer {</font>
+                  <font color="#FF0000"> ... on User {</font>
+                  <font color="#FF0000"> name</font>
+                  <font color="#FF0000"> login</font>
+                  <font color="#FF0000"> }</font>
+                  <font color="#FF0000"> }</font>
+                  <font color="#FF0000"> }</font>
+                  <font color="#FF0000"> } </font> }
                   reviews(last: 10) {
                     nodes {
                       author {
@@ -69,7 +79,7 @@ async function getRandomReviewer() {
        }
      )
      pulls2.search.edges.forEach((pull) => {
-       console.log(pull.node.review.node);
+       console.log(pull.node.reviews.node);
 
      })
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
