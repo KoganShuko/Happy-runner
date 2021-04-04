@@ -2,10 +2,32 @@ import fetch from 'node-fetch';
 import _ from 'lodash';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as request from '@octokit/request';
+import * as graphql from '@octokit/graphql';
 
 async function getRandomReviewer() {
   try {
-    const storageId = core.getInput('storageId');
+    const pulls = await octokit.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
+      owner: 'KoganShuko',
+      repo: 'Happy-runner'
+    });
+    console.log(pulls);
+
+    const pulls2 = await graphql(
+     ` {
+        search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
+          edges {
+            node {
+              ... on PullRequest {
+                requested_reviewers
+              }
+            }
+          }
+        }
+      }`
+    )
+    console.log(pulls2);
+   /*  const storageId = core.getInput('storageId');
     const storageKey = core.getInput('storageToken');
     const owner = core.getInput('owner');
     console.log(github);
@@ -36,7 +58,7 @@ async function getRandomReviewer() {
     const { name, slackId } = _.shuffle(potentialReviewers)[0];
     console.log(name, 'YO');
     core.setOutput('name', name);
-    core.setOutput('slackId', slackId);
+    core.setOutput('slackId', slackId); */
   } catch (e) {
     core.setFailed(e);
   }
