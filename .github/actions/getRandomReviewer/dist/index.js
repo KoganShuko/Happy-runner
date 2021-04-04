@@ -32,6 +32,7 @@ __nccwpck_require__.r(__webpack_exports__);
 async function getRandomReviewer() {
   try {
     const token = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('token')
+    console.log(_actions_github__WEBPACK_IMPORTED_MODULE_3__, _actions_github__WEBPACK_IMPORTED_MODULE_3__.GitHub)
     let pr = new _actions_github__WEBPACK_IMPORTED_MODULE_3__.GitHub(token)
     let resp = pr.pulls.list({
         owner: repoOwner,
