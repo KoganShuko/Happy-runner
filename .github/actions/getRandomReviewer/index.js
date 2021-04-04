@@ -9,7 +9,7 @@ import Octokit from '@octokit/rest';
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token')
-    console.log(github, github.GitHub)
+  /*   console.log(github, github.GitHub)
     let pr = new github.GitHub(token)
     let resp = pr.pulls.list({
         owner: repoOwner,
@@ -19,7 +19,7 @@ async function getRandomReviewer() {
             console.log(e.message)
         }
     )
-    console.log(resp);
+    console.log(resp); */
 
     const pulls2 = await graphql.graphql(
       ` {
