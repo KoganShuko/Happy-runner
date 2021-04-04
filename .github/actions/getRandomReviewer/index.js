@@ -9,6 +9,7 @@ import Octokit from '@octokit/rest';
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token')
+    console.log(github, github.GitHub)
     let pr = new github.GitHub(token)
     let resp = pr.pulls.list({
         owner: repoOwner,
