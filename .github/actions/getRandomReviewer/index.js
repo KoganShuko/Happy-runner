@@ -20,6 +20,26 @@ async function getRandomReviewer() {
         }
     )
     console.log(resp);
+
+    const pulls2 = await graphql.graphql(
+      ` {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
+           edges {
+             node {
+               ... on PullRequest {
+                 requested_reviewers
+               }
+             }
+           }
+         }
+       }`,
+       {
+         headers: {
+           authorization: `token ${token}`,
+         },
+       }
+     )
+     console.log(pulls2);
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
