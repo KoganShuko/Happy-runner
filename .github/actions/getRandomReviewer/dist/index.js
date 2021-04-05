@@ -9,26 +9,16 @@ module.exports =
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?node-fetch
-var _notfoundnode_fetch = __nccwpck_require__(751);
 // EXTERNAL MODULE: ./node_modules/lodash/lodash.js
 var lodash = __nccwpck_require__(772);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/core
 var core = __nccwpck_require__(218);
-// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/github
-var github = __nccwpck_require__(177);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/graphql
 var graphql = __nccwpck_require__(505);
-// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/rest
-var rest = __nccwpck_require__(767);
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.json
 const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"testUCHI\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
 
-
-
-
-/* import * as request from '@octokit/request'; */
 
 
 
@@ -37,17 +27,17 @@ async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
     const owner = core.getInput('owner');
-    const headers =  {
+    const headers = {
       headers: {
         authorization: `token ${token}`,
       },
-    }
+    };
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
-    const pullsRequests = await graphql.graphql(
+    const pullsRequests = await graphql.graphql.graphql(
       ` {
          search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
            edges {
@@ -76,20 +66,20 @@ async function getRandomReviewer() {
            }
          }
        }`,
-       headers,
-     )
+      headers
+    );
 
-     const tempBalancer = {};
+    const tempBalancer = {};
 
-     const { reviewers } = config_namespaceObject;
+    const { reviewers } = config_namespaceObject;
 
-     const availabilityPromises = [];
+    const availabilityPromises = [];
 
-     const getUserAvailability = (user) => {
+    const getUserAvailability = (user) => {
       availabilityPromises.push(
-        new Promise(async(res) => {
-            const userData = await graphql.graphql(
-              `
+        new Promise(async (res) => {
+          const userData = await graphql.graphql.graphql(
+            `
             query { 
               user(login:"${user}") { 
                 status {
@@ -98,49 +88,62 @@ async function getRandomReviewer() {
               }
             }
             `,
-            headers,
-            )
-       tempBalancer[user].isActive = !(userData.user.status && userData.user.status.indicatesLimitedAvailability);
-       res();
+            headers
+          );
+          tempBalancer[user].isActive = !(
+            userData.user.status &&
+            userData.user.status.indicatesLimitedAvailability
+          );
+          res();
         })
-      )
-     };
-     
-     reviewers.forEach((reviewer) => {
+      );
+    };
+
+    reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
         slackId: reviewer.slackId,
         reviewCount: 0,
-      }
+      };
       getUserAvailability(reviewer.name);
-     })
-
-     pullsRequests.search.edges.forEach((pull) => {
-       console.log(pull.node.reviewRequests.nodes, 'reviewerreviewer', pull)
-       pull.node.reviewRequests.nodes.forEach((review) => {
-         console.log(review);
-        if (review) {
-          const { requestedReviewer: { login }} = review;
-          console.log(login);
-          tempBalancer[login].reviewCount += 1;
-        } 
-                })
-    })
-    await Promise.all(availabilityPromises)
-    const updatedReviewerData = reviewers.map((reviewer) => {
-      return {
-        ...reviewer,
-        reviewCount: tempBalancer[reviewer.name].reviewCount,
-        isActive: tempBalancer[reviewer.name].isActive,
-      }
-    }).filter((data) => {
-      return data.isActive && data.name !== owner;
-    }).sort((prev, cur) => {
-      return prev.reviewCount - cur.reviewCount;
     });
 
-    console.log(updatedReviewerData, 'lala')
+    pullsRequests.search.edges.forEach((pull) => {
+      pull.node.reviewRequests.nodes.forEach((review) => {
+        if (review) {
+          const {
+            requestedReviewer: { login },
+          } = review;
+          tempBalancer[login].reviewCount += 1;
+        }
+      });
+    });
+    await Promise.all(availabilityPromises);
+    const updatedReviewerData = reviewers
+      .map((reviewer) => {
+        return {
+          ...reviewer,
+          reviewCount: tempBalancer[reviewer.name].reviewCount,
+          isActive: tempBalancer[reviewer.name].isActive,
+        };
+      })
+      .sort((prev, cur) => {
+        return prev.reviewCount - cur.reviewCount;
+      });
 
-  
+    const smallestReviewCount = updatedReviewerData[0].reviewCount;
+
+    const potentialReviewers = updatedReviewerData.filter((data) => {
+      return (
+        data.isActive &&
+        data.name !== owner &&
+        data.reviewCount === smallestReviewCount
+      );
+    });
+
+    const nextReviewer = (0,lodash.shuffle)(potentialReviewers);
+
+    core.setOutput('name', nextReviewer.name);
+    core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {
     core.setFailed(e);
   }
@@ -17376,34 +17379,10 @@ module.exports = eval("require")("@actions/core");
 
 /***/ }),
 
-/***/ 177:
-/***/ ((module) => {
-
-module.exports = eval("require")("@actions/github");
-
-
-/***/ }),
-
 /***/ 505:
 /***/ ((module) => {
 
 module.exports = eval("require")("@octokit/graphql");
-
-
-/***/ }),
-
-/***/ 767:
-/***/ ((module) => {
-
-module.exports = eval("require")("@octokit/rest");
-
-
-/***/ }),
-
-/***/ 751:
-/***/ ((module) => {
-
-module.exports = eval("require")("node-fetch");
 
 
 /***/ })

@@ -1,21 +1,17 @@
-import fetch from 'node-fetch';
-import _ from 'lodash';
+import { shuffle } from 'lodash';
 import * as core from '@actions/core';
-import * as github from '@actions/github';
-/* import * as request from '@octokit/request'; */
-import * as graphql from '@octokit/graphql';
-import Octokit from '@octokit/rest';
+import { graphql } from '@octokit/graphql';
 import config from './config.json';
 
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
     const owner = core.getInput('owner');
-    const headers =  {
+    const headers = {
       headers: {
         authorization: `token ${token}`,
       },
-    }
+    };
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -50,20 +46,20 @@ async function getRandomReviewer() {
            }
          }
        }`,
-       headers,
-     )
+      headers
+    );
 
-     const tempBalancer = {};
+    const tempBalancer = {};
 
-     const { reviewers } = config;
+    const { reviewers } = config;
 
-     const availabilityPromises = [];
+    const availabilityPromises = [];
 
-     const getUserAvailability = (user) => {
+    const getUserAvailability = (user) => {
       availabilityPromises.push(
-        new Promise(async(res) => {
-            const userData = await graphql.graphql(
-              `
+        new Promise(async (res) => {
+          const userData = await graphql.graphql(
+            `
             query { 
               user(login:"${user}") { 
                 status {
@@ -72,49 +68,62 @@ async function getRandomReviewer() {
               }
             }
             `,
-            headers,
-            )
-       tempBalancer[user].isActive = !(userData.user.status && userData.user.status.indicatesLimitedAvailability);
-       res();
+            headers
+          );
+          tempBalancer[user].isActive = !(
+            userData.user.status &&
+            userData.user.status.indicatesLimitedAvailability
+          );
+          res();
         })
-      )
-     };
-     
-     reviewers.forEach((reviewer) => {
+      );
+    };
+
+    reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
         slackId: reviewer.slackId,
         reviewCount: 0,
-      }
+      };
       getUserAvailability(reviewer.name);
-     })
-
-     pullsRequests.search.edges.forEach((pull) => {
-       console.log(pull.node.reviewRequests.nodes, 'reviewerreviewer', pull)
-       pull.node.reviewRequests.nodes.forEach((review) => {
-         console.log(review);
-        if (review) {
-          const { requestedReviewer: { login }} = review;
-          console.log(login);
-          tempBalancer[login].reviewCount += 1;
-        } 
-                })
-    })
-    await Promise.all(availabilityPromises)
-    const updatedReviewerData = reviewers.map((reviewer) => {
-      return {
-        ...reviewer,
-        reviewCount: tempBalancer[reviewer.name].reviewCount,
-        isActive: tempBalancer[reviewer.name].isActive,
-      }
-    }).filter((data) => {
-      return data.isActive && data.name !== owner;
-    }).sort((prev, cur) => {
-      return prev.reviewCount - cur.reviewCount;
     });
 
-    console.log(updatedReviewerData, 'lala')
+    pullsRequests.search.edges.forEach((pull) => {
+      pull.node.reviewRequests.nodes.forEach((review) => {
+        if (review) {
+          const {
+            requestedReviewer: { login },
+          } = review;
+          tempBalancer[login].reviewCount += 1;
+        }
+      });
+    });
+    await Promise.all(availabilityPromises);
+    const updatedReviewerData = reviewers
+      .map((reviewer) => {
+        return {
+          ...reviewer,
+          reviewCount: tempBalancer[reviewer.name].reviewCount,
+          isActive: tempBalancer[reviewer.name].isActive,
+        };
+      })
+      .sort((prev, cur) => {
+        return prev.reviewCount - cur.reviewCount;
+      });
 
-  
+    const smallestReviewCount = updatedReviewerData[0].reviewCount;
+
+    const potentialReviewers = updatedReviewerData.filter((data) => {
+      return (
+        data.isActive &&
+        data.name !== owner &&
+        data.reviewCount === smallestReviewCount
+      );
+    });
+
+    const nextReviewer = shuffle(potentialReviewers);
+
+    core.setOutput('name', nextReviewer.name);
+    core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {
     core.setFailed(e);
   }
