@@ -54,7 +54,7 @@ async function getRandomReviewer() {
     const getUserAvailability = (user) => {
       availabilityPromises.push(
         new Promise(async (res) => {
-          const userData = await graphql.graphql(
+          const userData = await graphql(
             `
             query { 
               user(login:"${user}") { 
