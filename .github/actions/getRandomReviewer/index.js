@@ -22,7 +22,7 @@ async function getRandomReviewer() {
 
     const pullsRequests = await graphql.graphql(
       ` {
-          search(query: "repo:${repoOwner}/${repoName} is:pr created:>2021-04-04", type: ISSUE, last: 100) {
+          search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${yesterdayISO}", type: ISSUE, last: 100) {
             edges {
               node {
                 ... on PullRequest {
@@ -119,7 +119,9 @@ async function getRandomReviewer() {
     });
 
     const nextReviewer = shuffle(potentialReviewers)[0];
-    console.log(nextReviewer, tempBalancer)
+    console.log('updatedReviewerData: ', updatedReviewerData)
+    console.log('-------------------------------------')
+    console.log('nextReviewer: ', nextReviewer)
     core.setOutput('name', nextReviewer.name);
     core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {
