@@ -11,7 +11,7 @@ async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
     const now = new Date();
-    const yesterday = yesterday.setDate(now.getDate() - 1).toISOString().substr(0, 10);
+    const yesterday = now.setDate(now.getDate() - 1).toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
       ` {
@@ -66,7 +66,7 @@ async function getRandomReviewer() {
             tempBalancer[user].isActive = await graphql.graphql(
               `
             query { 
-              user(login:"KoganShuko") { 
+              user(login:"${user}") { 
                 status {
                   indicatesLimitedAvailability
                 }
