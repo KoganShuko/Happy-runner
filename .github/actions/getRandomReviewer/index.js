@@ -26,7 +26,7 @@ const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 console.log(date, today)
     const pulls2 = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2021-04-01", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
