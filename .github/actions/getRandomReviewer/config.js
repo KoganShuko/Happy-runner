@@ -8,7 +8,8 @@ export const reviewers = [
     slackId: 'U01KFVAEB09',
   },
   {
-    name: 'Hiker-Hope',
+    name: 'testUCHI',
+/*     name: 'Hiker-Hope', */
     slackId: 'U01DN1LAUUQ',
   },
   {
