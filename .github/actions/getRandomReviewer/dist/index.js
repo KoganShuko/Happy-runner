@@ -38,9 +38,9 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
-    const now = new Date();
-    const yesterday = now.setDate(now.getDate() - 1)
-    console.log(now, yesterday)
+    const yesterday = new Date()
+    
+    yesterday.setDate(yesterday.getDate() - 1)
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
