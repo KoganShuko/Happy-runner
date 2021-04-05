@@ -49,7 +49,7 @@ const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 console.log(date, today)
     const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${today}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:=${today}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
