@@ -118,7 +118,7 @@ async function getRandomReviewer() {
         slackId: reviewer.slackId,
         counter: 0,
       }
-      getUserAvailability(reviewer);
+      getUserAvailability(reviewer.name);
      })
      
    /*   const user = await graphql.graphql(
