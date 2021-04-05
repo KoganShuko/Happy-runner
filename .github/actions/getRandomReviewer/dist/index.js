@@ -114,15 +114,14 @@ async function getRandomReviewer() {
      })
 
      pullsRequests.search.edges.forEach((pull) => {
-      // const reviewer = pull.node.reviewRequests.nodes.requestedReviewer && pull.node.reviewRequests.nodes.requestedReviewer.login;
        console.log(pull.node.reviewRequests.nodes, 'reviewerreviewer', pull)
        pull.node.reviewRequests.nodes.forEach((review) => {
          console.log(review);
         if (review) {
           const { requestedReviewer: { login }} = review;
-        }
-        console.log(login);
-           tempBalancer[login].reviewCount += 1;
+          console.log(login);
+          tempBalancer[login].reviewCount += 1;
+        } 
                 })
     })
     await Promise.all(availabilityPromises)
