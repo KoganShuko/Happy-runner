@@ -1,6 +1,7 @@
 import { shuffle } from 'lodash';
 import * as core from '@actions/core';
-import { graphql } from '@octokit/graphql';
+import * as graphql from '@octokit/graphql';
+import * as github from '@actions/github';
 import config from './config.json';
 
 async function getRandomReviewer() {
@@ -12,6 +13,7 @@ async function getRandomReviewer() {
         authorization: `token ${token}`,
       },
     };
+    console.log(github);
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -29,15 +31,6 @@ async function getRandomReviewer() {
                         ... on User {
                           login
                         }
-                      }
-                    }
-                  }
-                  title
-                  createdAt
-                  reviews(last: 10) {
-                    nodes {
-                      author {
-                        login
                       }
                     }
                   }
@@ -121,7 +114,7 @@ async function getRandomReviewer() {
     });
 
     const nextReviewer = shuffle(potentialReviewers);
-
+    console.log(nextReviewer, tempBalancer)
     core.setOutput('name', nextReviewer.name);
     core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {

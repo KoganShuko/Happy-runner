@@ -15,9 +15,12 @@ var lodash = __nccwpck_require__(772);
 var core = __nccwpck_require__(218);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/graphql
 var graphql = __nccwpck_require__(505);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/github
+var github = __nccwpck_require__(177);
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.json
 const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"testUCHI\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
+
 
 
 
@@ -32,12 +35,13 @@ async function getRandomReviewer() {
         authorization: `token ${token}`,
       },
     };
+    console.log(github);
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
-    const pullsRequests = await (0,graphql.graphql)(
+    const pullsRequests = await graphql(
       ` {
          search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
            edges {
@@ -49,15 +53,6 @@ async function getRandomReviewer() {
                         ... on User {
                           login
                         }
-                      }
-                    }
-                  }
-                  title
-                  createdAt
-                  reviews(last: 10) {
-                    nodes {
-                      author {
-                        login
                       }
                     }
                   }
@@ -78,7 +73,7 @@ async function getRandomReviewer() {
     const getUserAvailability = (user) => {
       availabilityPromises.push(
         new Promise(async (res) => {
-          const userData = await graphql.graphql.graphql(
+          const userData = await graphql.graphql(
             `
             query { 
               user(login:"${user}") { 
@@ -141,7 +136,7 @@ async function getRandomReviewer() {
     });
 
     const nextReviewer = (0,lodash.shuffle)(potentialReviewers);
-
+    console.log(nextReviewer, tempBalancer)
     core.setOutput('name', nextReviewer.name);
     core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {
@@ -17375,6 +17370,14 @@ getRandomReviewer();
 /***/ ((module) => {
 
 module.exports = eval("require")("@actions/core");
+
+
+/***/ }),
+
+/***/ 177:
+/***/ ((module) => {
+
+module.exports = eval("require")("@actions/github");
 
 
 /***/ }),
