@@ -96,14 +96,13 @@ console.log(yesterdayFormated)
      })
 
      const user = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(`
-    user (login: KoganShuko) {
-      status {
-        emoji
-        expiresAt
-        limitedAvailability: indicatesLimitedAvailability
-        message
+     query {
+      user(login:“KoganShuko”) {
+      login
+      name
+      createdAt
       }
-    }
+      }
 `,
 {
   headers: {

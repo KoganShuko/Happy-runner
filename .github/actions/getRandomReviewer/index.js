@@ -73,14 +73,13 @@ console.log(yesterdayFormated)
      })
 
      const user = await graphql.graphql(`
-    user (login: KoganShuko) {
-      status {
-        emoji
-        expiresAt
-        limitedAvailability: indicatesLimitedAvailability
-        message
+     query {
+      user(login:“KoganShuko”) {
+      login
+      name
+      createdAt
       }
-    }
+      }
 `,
 {
   headers: {
