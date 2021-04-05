@@ -37,14 +37,14 @@ async function getRandomReviewer() {
     };
     const repoName = github.context.payload.repository.name;
     const repoOwner = github.context.payload.repository.owner.name;
-
-    const yesterday = new Date();
-/*     yesterday.setDate(yesterday.getDate() - 1); */
-    const yesterdayISO = yesterday.toISOString().substr(0, 10);
+    const pullRequestOwner = github.context.actor;
+    console.log(github.context)
+    const date = new Date();
+    const dateISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
       ` {
-          search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${yesterdayISO}", type: ISSUE, last: 100) {
+          search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${dateISO}", type: ISSUE, last: 100) {
             edges {
               node {
                 ... on PullRequest {
@@ -66,7 +66,7 @@ async function getRandomReviewer() {
       `,
       headers
     );
-    console.log(pullsRequests.search.edges, yesterdayISO)
+
     // сохраняет промисы от запросов на доступность юзера для ожидания получения всех данных
     const availabilityPromises = [];
 
@@ -99,7 +99,7 @@ async function getRandomReviewer() {
 
     const { reviewers } = config_namespaceObject;
 
-    // добавление поля для подсчета
+    // добавление reviewCount и isActive в tempBalancer
     reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
         reviewCount: 0,
@@ -107,6 +107,7 @@ async function getRandomReviewer() {
       getUserAvailability(reviewer.name);
     });
 
+    // подсчет ревью
     pullsRequests.search.edges.forEach((pull) => {
       pull.node.reviewRequests.nodes.forEach((review) => {
         if (review) {
@@ -117,7 +118,10 @@ async function getRandomReviewer() {
         }
       });
     });
+
     await Promise.all(availabilityPromises);
+
+    // добавляем в исходный массив ревьюверов reviewCount и isActive
     const updatedReviewerData = reviewers
       .map((reviewer) => {
         return {
@@ -132,11 +136,12 @@ async function getRandomReviewer() {
 
     const smallestReviewCount = updatedReviewerData[0].reviewCount;
 
-    const potentialReviewers = updatedReviewerData.filter((data) => {
+    // определяем список потенциальных ревьюверов
+    const potentialReviewers = updatedReviewerData.filter((reviewer) => {
       return (
-        data.isActive &&
-        data.name !== owner &&
-        data.reviewCount === smallestReviewCount
+        reviewer.isActive &&
+        reviewer.name !== pullRequestOwner &&
+        reviewer.reviewCount === smallestReviewCount
       );
     });
 
