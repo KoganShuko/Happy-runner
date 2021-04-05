@@ -75,7 +75,6 @@ async function getRandomReviewer() {
     const date = new Date();
     const dateISO = date.toISOString().substr(0, 10);
 
-    console.log(graphql.graphql)
     const pullsRequests = await (0,graphql.graphql)(
       ` {
           search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${dateISO}", type: ISSUE, last: 100) {
@@ -101,6 +100,7 @@ async function getRandomReviewer() {
       headers
     );
 
+    console.log(pullsRequests)
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
