@@ -80,7 +80,8 @@ async function getRandomReviewer() {
                 authorization: `token ${token}`,
           },
        })
-       tempBalancer[user].isActive = userData.user.status.indicatesLimitedAvailability;
+       console.log(userData, userData.user)
+       tempBalancer[user].isActive = userData.user;
        res();
         })
       )
