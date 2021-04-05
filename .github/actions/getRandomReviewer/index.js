@@ -41,6 +41,7 @@ console.log(date, today)
                     }
                   }
                   title
+                  createdAt
                   reviews(last: 10) {
                     nodes {
                       author {
