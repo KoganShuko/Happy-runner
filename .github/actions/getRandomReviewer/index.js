@@ -22,25 +22,26 @@ async function getRandomReviewer() {
 
     const pullsRequests = await graphql.graphql(
       ` {
-         search(query: "repo:${repoOwner}/${repoName} is:pr created:>2021-04-04", type: ISSUE, last: 100) {
-           edges {
-             node {
-               ... on PullRequest {
+          search(query: "repo:${repoOwner}/${repoName} is:pr created:>2021-04-04", type: ISSUE, last: 100) {
+            edges {
+              node {
+                ... on PullRequest {
+                  createdAt
                   reviewRequests(first: 100) {
                     nodes {
                       requestedReviewer {
                         ... on User {
                           login
-                          createdAt
                         }
                       }
                     }
                   }
-               }
-             }
-           }
-         }
-       }`,
+                }
+              }
+            }
+          }
+        }
+      `,
       headers
     );
     console.log(pullsRequests.search.edges, yesterdayISO)
