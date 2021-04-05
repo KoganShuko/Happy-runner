@@ -13,6 +13,8 @@ async function getRandomReviewer() {
         authorization: `token ${token}`,
       },
     };
+    const repoName = github.context.payload.repository.name;
+    const repoOwner = github.context.payload.repository.owner.name;
     console.log(github.context, github.context.payload.repository);
 
     const yesterday = new Date();
@@ -21,7 +23,7 @@ async function getRandomReviewer() {
 
     const pullsRequests = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
+         search(query: "repo:${repoOwner}/${repoName} is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
@@ -42,10 +44,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    const tempBalancer = {};
-
-    const { reviewers } = config;
-
+    // сохраняет промисы от запросов на доступность юзера для ожидания получения всех данных
     const availabilityPromises = [];
 
     const getUserAvailability = (user) => {
@@ -72,9 +71,14 @@ async function getRandomReviewer() {
       );
     };
 
+    // для подсчета кол-ва ревью
+    const tempBalancer = {};
+
+    const { reviewers } = config;
+
+    // добавление поля для подсчета
     reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
-        slackId: reviewer.slackId,
         reviewCount: 0,
       };
       getUserAvailability(reviewer.name);
@@ -113,7 +117,7 @@ async function getRandomReviewer() {
       );
     });
 
-    const nextReviewer = shuffle(potentialReviewers);
+    const nextReviewer = shuffle(potentialReviewers)[0];
     console.log(nextReviewer, tempBalancer)
     core.setOutput('name', nextReviewer.name);
     core.setOutput('slackId', nextReviewer.slackId);
