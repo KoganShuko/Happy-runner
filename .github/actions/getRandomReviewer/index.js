@@ -17,7 +17,7 @@ async function getRandomReviewer() {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
-    const pullsRequests = await graphql.graphql(
+    const pullsRequests = await graphql(
       ` {
          search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
            edges {
