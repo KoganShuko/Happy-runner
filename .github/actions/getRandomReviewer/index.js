@@ -10,9 +10,9 @@ import config from './config.json';
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
-    const yesterday = new Date()
-    
-    yesterday.setDate(yesterday.getDate() - 1)
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
@@ -50,18 +50,13 @@ async function getRandomReviewer() {
          },
        }
      )
-     pullsRequests.search.edges.forEach((pull) => {
-       console.log(pull);
-       console.log(pull.node.reviewRequests.nodes);
-      /*  console.log(pull.node.reviewRequests.nodes.requestedReviewer.login); */
-
-     })
 
      const tempBalancer = {};
 
      const { reviewers } = config;
 
-     const promises = [];
+     const availabilityPromises = [];
+
      const getUserAvailability = (user) => {
       promises.push(
         new Promise(async(res) => {
@@ -80,7 +75,6 @@ async function getRandomReviewer() {
                 authorization: `token ${token}`,
           },
        })
-       console.log(user, userData.user)
        tempBalancer[user].isActive = userData.user.status && userData.user.status.indicatesLimitedAvailability;
        res();
         })
@@ -97,11 +91,13 @@ async function getRandomReviewer() {
 
      pullsRequests.search.edges.forEach((pull) => {
        const reviewer = pull.node.reviewRequests.nodes.requestedReviewer && pull.node.reviewRequests.nodes.requestedReviewer.login;
+       console.log(reviewer, 'reviewerreviewer')
        if (reviewer) {
          tempBalancer[reviewer].reviewCount += 1;
        }
     })
-    const lala = reviewers.map((reviewer) => {
+    await Promise.all(availabilityPromises)
+    const updatedReviewerData = reviewers.map((reviewer) => {
       return {
         ...reviewer,
         reviewCount: tempBalancer[reviewer.name].reviewCount,
@@ -109,7 +105,7 @@ async function getRandomReviewer() {
       }
     })
 
-    console.log(lala, 'lala')
+    console.log(updatedReviewerData, 'lala')
 
 
      
@@ -128,7 +124,7 @@ async function getRandomReviewer() {
           authorization: `token ${token}`,
     },
   }) */
-  await Promise.all(promises)
+
 console.log(tempBalancer);
   
   } catch (e) {

@@ -22,7 +22,7 @@ var graphql = __nccwpck_require__(505);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/rest
 var rest = __nccwpck_require__(767);
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.json
-const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"Hiker-Hope\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
+const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"testUCHI\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
 
 
@@ -36,9 +36,9 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
-    const yesterday = new Date()
-    
-    yesterday.setDate(yesterday.getDate() - 1)
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
@@ -76,18 +76,13 @@ async function getRandomReviewer() {
          },
        }
      )
-     pullsRequests.search.edges.forEach((pull) => {
-       console.log(pull);
-       console.log(pull.node.reviewRequests.nodes);
-      /*  console.log(pull.node.reviewRequests.nodes.requestedReviewer.login); */
-
-     })
 
      const tempBalancer = {};
 
      const { reviewers } = config_namespaceObject;
 
-     const promises = [];
+     const availabilityPromises = [];
+
      const getUserAvailability = (user) => {
       promises.push(
         new Promise(async(res) => {
@@ -106,7 +101,6 @@ async function getRandomReviewer() {
                 authorization: `token ${token}`,
           },
        })
-       console.log(user, userData.user)
        tempBalancer[user].isActive = userData.user.status && userData.user.status.indicatesLimitedAvailability;
        res();
         })
@@ -123,11 +117,13 @@ async function getRandomReviewer() {
 
      pullsRequests.search.edges.forEach((pull) => {
        const reviewer = pull.node.reviewRequests.nodes.requestedReviewer && pull.node.reviewRequests.nodes.requestedReviewer.login;
+       console.log(reviewer, 'reviewerreviewer')
        if (reviewer) {
          tempBalancer[reviewer].reviewCount += 1;
        }
     })
-    const lala = reviewers.map((reviewer) => {
+    await Promise.all(availabilityPromises)
+    const updatedReviewerData = reviewers.map((reviewer) => {
       return {
         ...reviewer,
         reviewCount: tempBalancer[reviewer.name].reviewCount,
@@ -135,7 +131,7 @@ async function getRandomReviewer() {
       }
     })
 
-    console.log(lala, 'lala')
+    console.log(updatedReviewerData, 'lala')
 
 
      
@@ -154,7 +150,7 @@ async function getRandomReviewer() {
           authorization: `token ${token}`,
     },
   }) */
-  await Promise.all(promises)
+
 console.log(tempBalancer);
   
   } catch (e) {
