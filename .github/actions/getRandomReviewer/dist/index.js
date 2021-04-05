@@ -122,8 +122,7 @@ async function getRandomReviewer() {
      })
 
      pullsRequests.search.edges.forEach((pull) => {
-       console.log(pull.node.reviewRequests.nodes, pull.node.reviewRequests.nodes.requestedReviewer)
-       const reviewer = pull.node.reviewRequests.nodes && pull.node.reviewRequests.nodes.requestedReviewer.login;
+       const reviewer = pull.node.reviewRequests.nodes.requestedReviewer && pull.node.reviewRequests.nodes.requestedReviewer.login;
        if (reviewer) {
          tempBalancer[reviewer].reviewCount += 1;
        }
@@ -136,7 +135,7 @@ async function getRandomReviewer() {
       }
     })
 
-    console.log(lala)
+    console.log(lala, 'lala')
 
 
      
