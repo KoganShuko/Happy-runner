@@ -25,7 +25,7 @@ const date = new Date('YYYY-MM-DD');
 console.log(date)
     const pulls2 = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:=${date}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:=2021-04-05", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
