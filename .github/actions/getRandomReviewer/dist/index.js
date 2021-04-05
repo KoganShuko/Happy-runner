@@ -36,6 +36,11 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
+    const headers =  {
+      headers: {
+        authorization: `token ${token}`,
+      },
+    }
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -70,11 +75,7 @@ async function getRandomReviewer() {
            }
          }
        }`,
-       {
-         headers: {
-           authorization: `token ${token}`,
-         },
-       }
+       headers,
      )
 
      const tempBalancer = {};
@@ -84,7 +85,7 @@ async function getRandomReviewer() {
      const availabilityPromises = [];
 
      const getUserAvailability = (user) => {
-      promises.push(
+      availabilityPromises.push(
         new Promise(async(res) => {
             const userData = await graphql.graphql(
               `
@@ -96,11 +97,8 @@ async function getRandomReviewer() {
               }
             }
             `,
-            {
-              headers: {
-                authorization: `token ${token}`,
-          },
-       })
+            headers,
+            )
        tempBalancer[user].isActive = userData.user.status && userData.user.status.indicatesLimitedAvailability;
        res();
         })
@@ -132,24 +130,6 @@ async function getRandomReviewer() {
     })
 
     console.log(updatedReviewerData, 'lala')
-
-
-     
-   /*   const user = await graphql.graphql(
-       `
-      query { 
-        user(login:"KoganShuko") { 
-          status {
-            indicatesLimitedAvailability
-          }
-        }
-      }
-      `,
-      {
-        headers: {
-          authorization: `token ${token}`,
-    },
-  }) */
 
 console.log(tempBalancer);
   
