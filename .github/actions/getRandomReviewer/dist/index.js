@@ -96,7 +96,6 @@ console.log(yesterdayFormated)
      })
 
      const user = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(`
-  query () {
     user (login: KoganShuko) {
       status {
         emoji
@@ -105,7 +104,6 @@ console.log(yesterdayFormated)
         message
       }
     }
-  }
 `,
 {
   headers: {
