@@ -5,34 +5,17 @@ import * as github from '@actions/github';
 import * as request from '@octokit/request';
 import * as graphql from '@octokit/graphql';
 import Octokit from '@octokit/rest';
+import config from './config.json';
 
 async function getRandomReviewer() {
   try {
-    const token = core.getInput('token')
-  /*   console.log(github, github.GitHub)
-    let pr = new github.GitHub(token)
-    let resp = pr.pulls.list({
-        owner: repoOwner,
-        repo: repo,
-    }).catch(
-        e => {
-            console.log(e.message)
-        }
-    )
-    console.log(resp); */
+    const token = core.getInput('token');
+    const now = new Date();
+    const yesterday = yesterday.setDate(now.getDate() - 1).toISOString().substr(0, 10);
 
-    const yesterday = new Date()
-    
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayFormated = yesterday.toISOString().substr(0, 10);
-const date = new Date();/* 
-const today = `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate()}` */
-/* const yesterday = new Date().toISOString().substr(0, 10);
-console.log(date, today) */
-console.log(yesterdayFormated)
-    const pulls2 = await graphql.graphql(
+    const pullsRequests = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayFormated}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterday}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
@@ -66,79 +49,66 @@ console.log(yesterdayFormated)
          },
        }
      )
-     pulls2.search.edges.forEach((pull) => {
+     pullsRequests.search.edges.forEach((pull) => {
        console.log(pull);
        console.log(pull.node.reviewRequests.nodes);
 
      })
 
-     const user = await graphql.graphql(`
-     query { 
-      user(login:"KoganShuko") { 
-        status {
-          indicatesLimitedAvailability
-        }
-      }
-    }
-    `,
-    {
-      headers: {
-        authorization: `token ${token}`,
-  },
-})
-console.log(user);
-   /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
-      owner: 'KoganShuko',
-      repo: 'Happy-runner'
-    });
-    console.log(pulls);
+     const tempBalancer = {};
 
-    const pulls2 = await graphql.graphql(
-     ` {
-        search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
-          edges {
-            node {
-              ... on PullRequest {
-                requested_reviewers
+     const { reviewers } = config;
+
+     const promises = [];
+     const getUserAvailability = (user) => {
+      promises.push(
+        new Promise(async(res) => {
+            tempBalancer[user].isActive = await graphql.graphql(
+              `
+            query { 
+              user(login:"KoganShuko") { 
+                status {
+                  indicatesLimitedAvailability
+                }
               }
             }
+            `,
+            {
+              headers: {
+                authorization: `token ${token}`,
+          },
+       })
+       res();
+        })
+      )
+     };
+     
+     reviewers.forEach((reviewer) => {
+      tempBalancer[reviewer.name] = {
+        slackId: reviewer.slackId,
+        counter: 0,
+      }
+      getUserAvailability(reviewer);
+     })
+     
+   /*   const user = await graphql.graphql(
+       `
+      query { 
+        user(login:"KoganShuko") { 
+          status {
+            indicatesLimitedAvailability
           }
         }
-      }`
-    )
-    console.log(pulls2); */
-   /*  const storageId = core.getInput('storageId');
-    const storageKey = core.getInput('storageToken');
-    const owner = core.getInput('owner');
-    console.log(github);
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Master-Key': storageKey,
-    };
-    const reviewersData = await fetch(
-      `https://api.jsonbin.io/v3/b/${storageId}/latest`,
-      { headers }
-    );
-    const {
-      record: { reviewers },
-    } = await reviewersData.json();
-    reviewers.sort((prev, cur) => prev.count - cur.count);
-    const activeReviewers = reviewers.filter(
-      (reviewer) => {
-        console.log('eviewer.name', reviewer.name, 'owner', owner)
-        return reviewer.isActive && reviewer.name !== owner;
       }
-    );
-    console.log(activeReviewers, 'activeReviewers');
-    const smallestReviewCount = activeReviewers[0].count;
-    const potentialReviewers = activeReviewers.filter(
-      (reviewer) => reviewer.count === smallestReviewCount
-    );
-    console.log(potentialReviewers, 'potentialReviewers');
-    const { name, slackId } = _.shuffle(potentialReviewers)[0];
-    console.log(name, 'YO');
-    core.setOutput('name', name);
-    core.setOutput('slackId', slackId); */
+      `,
+      {
+        headers: {
+          authorization: `token ${token}`,
+    },
+  }) */
+  await Promise.all(promises)
+console.log(tempBalancer);
+  
   } catch (e) {
     core.setFailed(e);
   }

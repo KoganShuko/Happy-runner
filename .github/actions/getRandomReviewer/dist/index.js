@@ -2,25 +2,31 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 966:
+/***/ 821:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(751);
-/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(772);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(218);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(177);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(6);
-/* harmony import */ var _octokit_request__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_request__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(505);
-/* harmony import */ var _octokit_graphql__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_graphql__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _octokit_rest__WEBPACK_IMPORTED_MODULE_6__ = __nccwpck_require__(767);
-/* harmony import */ var _octokit_rest__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_rest__WEBPACK_IMPORTED_MODULE_6__);
+
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?node-fetch
+var _notfoundnode_fetch = __nccwpck_require__(751);
+// EXTERNAL MODULE: ./node_modules/lodash/lodash.js
+var lodash = __nccwpck_require__(772);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/core
+var core = __nccwpck_require__(218);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/github
+var github = __nccwpck_require__(177);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/request
+var request = __nccwpck_require__(6);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/graphql
+var graphql = __nccwpck_require__(505);
+// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/rest
+var rest = __nccwpck_require__(767);
+// CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.json
+const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"Hiker-Hope\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
+// CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
+
 
 
 
@@ -31,31 +37,13 @@ __nccwpck_require__.r(__webpack_exports__);
 
 async function getRandomReviewer() {
   try {
-    const token = _actions_core__WEBPACK_IMPORTED_MODULE_2__.getInput('token')
-  /*   console.log(github, github.GitHub)
-    let pr = new github.GitHub(token)
-    let resp = pr.pulls.list({
-        owner: repoOwner,
-        repo: repo,
-    }).catch(
-        e => {
-            console.log(e.message)
-        }
-    )
-    console.log(resp); */
+    const token = core.getInput('token');
+    const now = new Date();
+    const yesterday = yesterday.setDate(now.getDate() - 1).toISOString().substr(0, 10);
 
-    const yesterday = new Date()
-    
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayFormated = yesterday.toISOString().substr(0, 10);
-const date = new Date();/* 
-const today = `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate()}` */
-/* const yesterday = new Date().toISOString().substr(0, 10);
-console.log(date, today) */
-console.log(yesterdayFormated)
-    const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
+    const pullsRequests = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayFormated}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterday}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
@@ -89,81 +77,68 @@ console.log(yesterdayFormated)
          },
        }
      )
-     pulls2.search.edges.forEach((pull) => {
+     pullsRequests.search.edges.forEach((pull) => {
        console.log(pull);
        console.log(pull.node.reviewRequests.nodes);
 
      })
 
-     const user = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(`
-     query { 
-      user(login:"KoganShuko") { 
-        status {
-          indicatesLimitedAvailability
-        }
-      }
-    }
-    `,
-    {
-      headers: {
-        authorization: `token ${token}`,
-  },
-})
-console.log(user);
-   /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
-      owner: 'KoganShuko',
-      repo: 'Happy-runner'
-    });
-    console.log(pulls);
+     const tempBalancer = {};
 
-    const pulls2 = await graphql.graphql(
-     ` {
-        search(query: "repo:KoganShuko/Happy-runner is:pr created:>2019-04-01") {
-          edges {
-            node {
-              ... on PullRequest {
-                requested_reviewers
+     const { reviewers } = config_namespaceObject;
+
+     const promises = [];
+     const getUserAvailability = (user) => {
+      promises.push(
+        new Promise(async(res) => {
+            tempBalancer[user].isActive = await graphql.graphql(
+              `
+            query { 
+              user(login:"KoganShuko") { 
+                status {
+                  indicatesLimitedAvailability
+                }
               }
             }
+            `,
+            {
+              headers: {
+                authorization: `token ${token}`,
+          },
+       })
+       res();
+        })
+      )
+     };
+     
+     reviewers.forEach((reviewer) => {
+      tempBalancer[reviewer.name] = {
+        slackId: reviewer.slackId,
+        counter: 0,
+      }
+      getUserAvailability(reviewer);
+     })
+     
+   /*   const user = await graphql.graphql(
+       `
+      query { 
+        user(login:"KoganShuko") { 
+          status {
+            indicatesLimitedAvailability
           }
         }
-      }`
-    )
-    console.log(pulls2); */
-   /*  const storageId = core.getInput('storageId');
-    const storageKey = core.getInput('storageToken');
-    const owner = core.getInput('owner');
-    console.log(github);
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Master-Key': storageKey,
-    };
-    const reviewersData = await fetch(
-      `https://api.jsonbin.io/v3/b/${storageId}/latest`,
-      { headers }
-    );
-    const {
-      record: { reviewers },
-    } = await reviewersData.json();
-    reviewers.sort((prev, cur) => prev.count - cur.count);
-    const activeReviewers = reviewers.filter(
-      (reviewer) => {
-        console.log('eviewer.name', reviewer.name, 'owner', owner)
-        return reviewer.isActive && reviewer.name !== owner;
       }
-    );
-    console.log(activeReviewers, 'activeReviewers');
-    const smallestReviewCount = activeReviewers[0].count;
-    const potentialReviewers = activeReviewers.filter(
-      (reviewer) => reviewer.count === smallestReviewCount
-    );
-    console.log(potentialReviewers, 'potentialReviewers');
-    const { name, slackId } = _.shuffle(potentialReviewers)[0];
-    console.log(name, 'YO');
-    core.setOutput('name', name);
-    core.setOutput('slackId', slackId); */
+      `,
+      {
+        headers: {
+          authorization: `token ${token}`,
+    },
+  }) */
+  await Promise.all(promises)
+console.log(tempBalancer);
+  
   } catch (e) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_2__.setFailed(e);
+    core.setFailed(e);
   }
 }
 
@@ -17472,35 +17447,6 @@ module.exports = eval("require")("node-fetch");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => module['default'] :
-/******/ 				() => module;
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -17527,6 +17473,6 @@ module.exports = eval("require")("node-fetch");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(966);
+/******/ 	return __nccwpck_require__(821);
 /******/ })()
 ;
