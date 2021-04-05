@@ -13,7 +13,7 @@ async function getRandomReviewer() {
         authorization: `token ${token}`,
       },
     };
-    console.log(github);
+    console.log(github.context, github.context.payload.repository);
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
