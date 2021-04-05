@@ -18,7 +18,7 @@ async function getRandomReviewer() {
     const pullRequestOwner = github.context.actor;
     console.log(github.context)
     const date = new Date();
-    const dateISO = yesterday.toISOString().substr(0, 10);
+    const dateISO = date.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
       ` {
@@ -112,18 +112,11 @@ async function getRandomReviewer() {
         return prev.reviewCount - cur.reviewCount;
       });
 
-    const smallestReviewCount = updatedReviewerData[0].reviewCount;
-
-    // определяем список потенциальных ревьюверов
-    const potentialReviewers = updatedReviewerData.filter((reviewer) => {
-      return (
-        reviewer.isActive &&
-        reviewer.name !== pullRequestOwner &&
-        reviewer.reviewCount === smallestReviewCount
-      );
-    });
-
+    const reviewersWithoutOwner = updatedReviewerData.filter((reviewer) => reviewer.name !== pullRequestOwner);
+    const smallestReviewCount = reviewersWithoutOwner[0].reviewCount;
+    const potentialReviewers = reviewersWithoutOwner.filter((reviewer) => reviewer.isActive && reviewer.reviewCount === smallestReviewCount);
     const nextReviewer = shuffle(potentialReviewers)[0];
+
     console.log('updatedReviewerData: ', updatedReviewerData)
     console.log('-------------------------------------')
     console.log('nextReviewer: ', nextReviewer)
