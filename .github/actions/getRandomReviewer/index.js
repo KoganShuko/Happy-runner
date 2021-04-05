@@ -73,7 +73,7 @@ console.log(yesterdayFormated)
      })
 
      const user = await graphql.graphql(`
-  query ($user: KoganShuko) {
+  query () {
     user (login: KoganShuko) {
       status {
         emoji
