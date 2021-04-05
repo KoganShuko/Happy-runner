@@ -106,7 +106,12 @@ console.log(yesterdayFormated)
       }
     }
   }
-`)
+`,
+{
+  headers: {
+    authorization: `token ${token}`,
+  },
+})
 console.log(user);
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
