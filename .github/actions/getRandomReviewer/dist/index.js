@@ -94,6 +94,20 @@ console.log(yesterdayFormated)
        console.log(pull.node.reviewRequests.nodes);
 
      })
+
+     const user = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(`
+  query ($user: String!) {
+    user (login: KoganShuko) {
+      status {
+        emoji
+        expiresAt
+        limitedAvailability: indicatesLimitedAvailability
+        message
+      }
+    }
+  }
+`)
+console.log(user);
    /*  const pulls = await request.request('GET /repos/{owner}/{repo}/pulls?state=all&sort=created&direction=desc', {
       owner: 'KoganShuko',
       repo: 'Happy-runner'
