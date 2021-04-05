@@ -45,7 +45,7 @@ async function getRandomReviewer() {
     console.log(resp); */
 
 const date = new Date();
-const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - 1}`
+const today = `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate() - 1}`
 console.log(date, today)
     const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
       ` {
