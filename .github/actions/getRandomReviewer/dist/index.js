@@ -17,8 +17,6 @@ var lodash = __nccwpck_require__(772);
 var core = __nccwpck_require__(218);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/github
 var github = __nccwpck_require__(177);
-// EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/request
-var request = __nccwpck_require__(6);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/graphql
 var graphql = __nccwpck_require__(505);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@octokit/rest
@@ -30,7 +28,7 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 
 
 
-
+/* import * as request from '@octokit/request'; */
 
 
 
@@ -53,7 +51,6 @@ async function getRandomReviewer() {
                     nodes {
                       requestedReviewer {
                         ... on User {
-                          name
                           login
                         }
                       }
@@ -82,6 +79,7 @@ async function getRandomReviewer() {
      pullsRequests.search.edges.forEach((pull) => {
        console.log(pull);
        console.log(pull.node.reviewRequests.nodes);
+      /*  console.log(pull.node.reviewRequests.nodes.requestedReviewer.login); */
 
      })
 
@@ -109,7 +107,7 @@ async function getRandomReviewer() {
           },
        })
        console.log(user, userData.user)
-       tempBalancer[user].isActive = userData.user.status;
+       tempBalancer[user].isActive = userData.user.status && userData.user.status.indicatesLimitedAvailability;
        res();
         })
       )
@@ -118,10 +116,28 @@ async function getRandomReviewer() {
      reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
         slackId: reviewer.slackId,
-        counter: 0,
+        reviewCount: 0,
       }
       getUserAvailability(reviewer.name);
      })
+
+     pullsRequests.search.edges.forEach((pull) => {
+       const reviewer = pull.node.reviewRequests.nodes && pull.node.reviewRequests.nodes.requestedReviewer.login;
+       if (reviewer) {
+         tempBalancer[reviewer].reviewCount += 1;
+       }
+    })
+    const lala = reviewers.map((reviewer) => {
+      return {
+        ...reviewer,
+        reviewCount: tempBalancer[reviewer.name].reviewCount,
+        isActive: tempBalancer[reviewer.name].isActive,
+      }
+    })
+
+    console.log(lala)
+
+
      
    /*   const user = await graphql.graphql(
        `
@@ -17388,14 +17404,6 @@ module.exports = eval("require")("@actions/github");
 /***/ ((module) => {
 
 module.exports = eval("require")("@octokit/graphql");
-
-
-/***/ }),
-
-/***/ 6:
-/***/ ((module) => {
-
-module.exports = eval("require")("@octokit/request");
 
 
 /***/ }),

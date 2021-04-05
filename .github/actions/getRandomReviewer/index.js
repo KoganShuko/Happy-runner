@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import _ from 'lodash';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import * as request from '@octokit/request';
+/* import * as request from '@octokit/request'; */
 import * as graphql from '@octokit/graphql';
 import Octokit from '@octokit/rest';
 import config from './config.json';
@@ -25,7 +25,6 @@ async function getRandomReviewer() {
                     nodes {
                       requestedReviewer {
                         ... on User {
-                          name
                           login
                         }
                       }
@@ -54,6 +53,7 @@ async function getRandomReviewer() {
      pullsRequests.search.edges.forEach((pull) => {
        console.log(pull);
        console.log(pull.node.reviewRequests.nodes);
+      /*  console.log(pull.node.reviewRequests.nodes.requestedReviewer.login); */
 
      })
 
@@ -81,7 +81,7 @@ async function getRandomReviewer() {
           },
        })
        console.log(user, userData.user)
-       tempBalancer[user].isActive = userData.user.status;
+       tempBalancer[user].isActive = userData.user.status && userData.user.status.indicatesLimitedAvailability;
        res();
         })
       )
@@ -90,10 +90,28 @@ async function getRandomReviewer() {
      reviewers.forEach((reviewer) => {
       tempBalancer[reviewer.name] = {
         slackId: reviewer.slackId,
-        counter: 0,
+        reviewCount: 0,
       }
       getUserAvailability(reviewer.name);
      })
+
+     pullsRequests.search.edges.forEach((pull) => {
+       const reviewer = pull.node.reviewRequests.nodes && pull.node.reviewRequests.nodes.requestedReviewer.login;
+       if (reviewer) {
+         tempBalancer[reviewer].reviewCount += 1;
+       }
+    })
+    const lala = reviewers.map((reviewer) => {
+      return {
+        ...reviewer,
+        reviewCount: tempBalancer[reviewer.name].reviewCount,
+        isActive: tempBalancer[reviewer.name].isActive,
+      }
+    })
+
+    console.log(lala)
+
+
      
    /*   const user = await graphql.graphql(
        `
