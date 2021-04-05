@@ -43,7 +43,7 @@ async function getRandomReviewer() {
        }`,
       headers
     );
-    console.log(pullsRequests, yesterdayISO)
+    console.log(pullsRequests.search.edges, yesterdayISO)
     // сохраняет промисы от запросов на доступность юзера для ожидания получения всех данных
     const availabilityPromises = [];
 
