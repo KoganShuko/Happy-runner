@@ -99,7 +99,7 @@ async function getRandomReviewer() {
             `,
             headers,
             )
-       tempBalancer[user].isActive = !userData.user.status && !userData.user.status.indicatesLimitedAvailability;
+       tempBalancer[user].isActive = !(userData.user.status && userData.user.status.indicatesLimitedAvailability);
        res();
         })
       )
@@ -115,7 +115,7 @@ async function getRandomReviewer() {
 
      pullsRequests.search.edges.forEach((pull) => {
        const reviewer = pull.node.reviewRequests.nodes.requestedReviewer && pull.node.reviewRequests.nodes.requestedReviewer.login;
-       console.log(reviewer, 'reviewerreviewer', pull)
+       console.log(pull.node.reviewRequests.nodes, 'reviewerreviewer', pull)
        if (reviewer) {
          tempBalancer[reviewer].reviewCount += 1;
        }
