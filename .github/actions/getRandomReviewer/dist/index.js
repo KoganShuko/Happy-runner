@@ -97,16 +97,16 @@ console.log(yesterdayFormated)
 
      const user = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(`
      query {
-      user(login:“KoganShuko”) {
-      login
-      name
-      createdAt
+        user(login:“KoganShuko”) {
+          login
+          name
+          createdAt
+        }
       }
-      }
-`,
-{
-  headers: {
-    authorization: `token ${token}`,
+    `,
+    {
+      headers: {
+        authorization: `token ${token}`,
   },
 })
 console.log(user);

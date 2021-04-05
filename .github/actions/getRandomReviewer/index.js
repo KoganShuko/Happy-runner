@@ -74,16 +74,16 @@ console.log(yesterdayFormated)
 
      const user = await graphql.graphql(`
      query {
-      user(login:“KoganShuko”) {
-      login
-      name
-      createdAt
+        user(login:“KoganShuko”) {
+          login
+          name
+          createdAt
+        }
       }
-      }
-`,
-{
-  headers: {
-    authorization: `token ${token}`,
+    `,
+    {
+      headers: {
+        authorization: `token ${token}`,
   },
 })
 console.log(user);
