@@ -92,8 +92,8 @@ async function getRandomReviewer() {
      const promises = [];
      const getUserAvailability = (user) => {
       promises.push(
-        new Promise(async(res) => {
-            const userData = await graphql.graphql(
+        new Promise((res) => {
+            const userData = graphql.graphql(
               `
             query { 
               user(login:"${user}") { 
@@ -107,10 +107,12 @@ async function getRandomReviewer() {
               headers: {
                 authorization: `token ${token}`,
           },
-       })
-       console.log(userData, userData.user)
-       tempBalancer[user].isActive = userData.user.status;
-       res();
+       }).then(() => {
+         tempBalancer[user].isActive = userData.user.status;
+         res();
+
+         console.log(userData, userData.user)
+      })
         })
       )
      };
