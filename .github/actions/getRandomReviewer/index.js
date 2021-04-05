@@ -21,12 +21,18 @@ async function getRandomReviewer() {
     )
     console.log(resp); */
 
-const date = new Date();
-const today = `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate()}`
-console.log(date, today)
+    const yesterday = new Date()
+    
+    yesterday.setDate(yesterday.getDate() - 1)
+    const yesterdayFormated = yesterday.toISOString().substr(0, 10);
+const date = new Date();/* 
+const today = `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate()}` */
+/* const yesterday = new Date().toISOString().substr(0, 10);
+console.log(date, today) */
+console.log(yesterdayFormated)
     const pulls2 = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:=${today}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayFormated}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
