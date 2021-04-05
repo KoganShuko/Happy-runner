@@ -2,7 +2,7 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 821:
+/***/ 811:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -17,8 +17,42 @@ var core = __nccwpck_require__(218);
 var graphql = __nccwpck_require__(505);
 // EXTERNAL MODULE: ../../.nvm/versions/node/v14.15.1/lib/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?@actions/github
 var github = __nccwpck_require__(177);
-// CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.json
-const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuko\",\"slackId\":\"UBK40QGRM\"},{\"name\":\"egorov-staff-hub\",\"slackId\":\"U01KFVAEB09\"},{\"name\":\"testUCHI\",\"slackId\":\"U01DN1LAUUQ\"},{\"name\":\"abstractmage\",\"slackId\":\"ULFHQLP6W\"},{\"name\":\"aryzhkova\",\"slackId\":\"UAU9ENR3R\"},{\"name\":\"yujinmeru\",\"slackId\":\"UB1EN66UC\"},{\"name\":\"Helen2813\",\"slackId\":\"U01HMMH5J0G\"},{\"name\":\"mikhailkaryamin\",\"slackId\":\"U01M84FUG0Y\"}]}");
+// CONCATENATED MODULE: ./.github/actions/getRandomReviewer/config.js
+const reviewers = [
+  {
+    name: 'KoganShuko',
+    slackId: 'UBK40QGRM',
+  },
+  {
+    name: 'egorov-staff-hub',
+    slackId: 'U01KFVAEB09',
+  },
+  {
+    name: 'Hiker-Hope',
+    slackId: 'U01DN1LAUUQ',
+  },
+  {
+    name: 'abstractmage',
+    slackId: 'ULFHQLP6W',
+  },
+  {
+    name: 'aryzhkova',
+    slackId: 'UAU9ENR3R',
+  },
+  {
+    name: 'yujinmeru',
+    slackId: 'UB1EN66UC',
+  },
+  {
+    name: 'Helen2813',
+    slackId: 'U01HMMH5J0G',
+  },
+  {
+    name: 'mikhailkaryamin',
+    slackId: 'U01M84FUG0Y',
+  },
+];
+
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
 
 
@@ -29,7 +63,6 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
-    const owner = core.getInput('owner');
     const headers = {
       headers: {
         authorization: `token ${token}`,
@@ -38,11 +71,12 @@ async function getRandomReviewer() {
     const repoName = github.context.payload.repository.name;
     const repoOwner = github.context.payload.repository.owner.name;
     const pullRequestOwner = github.context.actor;
-    console.log(github.context)
+
     const date = new Date();
     const dateISO = date.toISOString().substr(0, 10);
 
-    const pullsRequests = await graphql.graphql(
+    console.log(graphql.graphql)
+    const pullsRequests = await (0,graphql.graphql)(
       ` {
           search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${dateISO}", type: ISSUE, last: 100) {
             edges {
@@ -67,13 +101,16 @@ async function getRandomReviewer() {
       headers
     );
 
+    // для подсчета кол-ва ревью
+    const tempBalancer = {};
+
     // сохраняет промисы от запросов на доступность юзера для ожидания получения всех данных
     const availabilityPromises = [];
 
     const getUserAvailability = (user) => {
       availabilityPromises.push(
         new Promise(async (res) => {
-          const userData = await graphql.graphql(
+          const userData = await graphql.graphql.graphql(
             `
             query { 
               user(login:"${user}") { 
@@ -93,11 +130,6 @@ async function getRandomReviewer() {
         })
       );
     };
-
-    // для подсчета кол-ва ревью
-    const tempBalancer = {};
-
-    const { reviewers } = config_namespaceObject;
 
     // добавление reviewCount и isActive в tempBalancer
     reviewers.forEach((reviewer) => {
@@ -122,8 +154,7 @@ async function getRandomReviewer() {
     await Promise.all(availabilityPromises);
 
     // добавляем в исходный массив ревьюверов reviewCount и isActive
-    const updatedReviewerData = reviewers
-      .map((reviewer) => {
+    const updatedReviewerData = reviewers.map((reviewer) => {
         return {
           ...reviewer,
           reviewCount: tempBalancer[reviewer.name].reviewCount,
@@ -134,14 +165,19 @@ async function getRandomReviewer() {
         return prev.reviewCount - cur.reviewCount;
       });
 
-    const reviewersWithoutOwner = updatedReviewerData.filter((reviewer) => reviewer.name !== pullRequestOwner);
+    const reviewersWithoutOwner = updatedReviewerData.filter(
+      (reviewer) => reviewer.name !== pullRequestOwner
+    );
     const smallestReviewCount = reviewersWithoutOwner[0].reviewCount;
-    const potentialReviewers = reviewersWithoutOwner.filter((reviewer) => reviewer.isActive && reviewer.reviewCount === smallestReviewCount);
+    const potentialReviewers = reviewersWithoutOwner.filter(
+      (reviewer) =>
+        reviewer.isActive && reviewer.reviewCount === smallestReviewCount
+    );
     const nextReviewer = (0,lodash.shuffle)(potentialReviewers)[0];
 
-    console.log('updatedReviewerData: ', updatedReviewerData)
-    console.log('-------------------------------------')
-    console.log('nextReviewer: ', nextReviewer)
+    console.log('updatedReviewerData: ', updatedReviewerData);
+    console.log('-------------------------------------');
+    console.log('nextReviewer: ', nextReviewer);
     core.setOutput('name', nextReviewer.name);
     core.setOutput('slackId', nextReviewer.slackId);
   } catch (e) {
@@ -17456,6 +17492,6 @@ module.exports = eval("require")("@octokit/graphql");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(821);
+/******/ 	return __nccwpck_require__(811);
 /******/ })()
 ;
