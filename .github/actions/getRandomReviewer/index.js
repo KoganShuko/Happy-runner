@@ -81,7 +81,7 @@ async function getRandomReviewer() {
           },
        })
        console.log(userData, userData.user)
-       tempBalancer[user].isActive = userData.user;
+       tempBalancer[user].isActive = userData.user.status;
        res();
         })
       )
