@@ -90,7 +90,9 @@ async function getRandomReviewer() {
           const {
             requestedReviewer: { login },
           } = review;
-          tempBalancer[login].reviewCount += 1;
+          if (tempBalancer[login]) {
+            tempBalancer[login].reviewCount += 1;
+          }
         }
       });
     });

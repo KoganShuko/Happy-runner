@@ -28,8 +28,8 @@ const reviewers = [
     slackId: 'U01KFVAEB09',
   },
   {
-    name: 'testUCHI',
-/*     name: 'Hiker-Hope', */
+    /* name: 'testUCHI', */
+    name: 'Hiker-Hope',
     slackId: 'U01DN1LAUUQ',
   },
   {
@@ -52,6 +52,10 @@ const reviewers = [
     name: 'mikhailkaryamin',
     slackId: 'U01M84FUG0Y',
   },
+  {
+    name: 'alexeyivanov-web',
+    slackId: 'U01FB27BCG3',
+  }
 ];
 
 // CONCATENATED MODULE: ./.github/actions/getRandomReviewer/index.js
@@ -147,7 +151,9 @@ async function getRandomReviewer() {
           const {
             requestedReviewer: { login },
           } = review;
-          tempBalancer[login].reviewCount += 1;
+          if (tempBalancer[login]) {
+            tempBalancer[login].reviewCount += 1;
+          }
         }
       });
     });
