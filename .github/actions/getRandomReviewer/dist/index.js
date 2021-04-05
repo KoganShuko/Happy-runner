@@ -39,11 +39,13 @@ async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
     const now = new Date();
-    const yesterday = now.setDate(now.getDate() - 1).toISOString().substr(0, 10);
+    const yesterday = now.setDate(now.getDate() - 1)
+    console.log(now, yesterday)
+    const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterday}", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>${yesterdayISO}", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
