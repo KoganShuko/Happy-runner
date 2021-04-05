@@ -37,10 +37,9 @@ async function getRandomReviewer() {
     };
     const repoName = github.context.payload.repository.name;
     const repoOwner = github.context.payload.repository.owner.name;
-    console.log(github.context, github.context.payload.repository);
 
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+/*     yesterday.setDate(yesterday.getDate() - 1); */
     const yesterdayISO = yesterday.toISOString().substr(0, 10);
 
     const pullsRequests = await graphql.graphql(
@@ -54,6 +53,7 @@ async function getRandomReviewer() {
                       requestedReviewer {
                         ... on User {
                           login
+                          createdAt
                         }
                       }
                     }
@@ -65,7 +65,7 @@ async function getRandomReviewer() {
        }`,
       headers
     );
-
+    console.log(pullsRequests, yesterdayISO)
     // сохраняет промисы от запросов на доступность юзера для ожидания получения всех данных
     const availabilityPromises = [];
 
