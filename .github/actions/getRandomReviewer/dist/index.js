@@ -45,10 +45,11 @@ async function getRandomReviewer() {
     console.log(resp); */
 
 const date = new Date();
+const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 console.log(date)
     const pulls2 = await _octokit_graphql__WEBPACK_IMPORTED_MODULE_5__.graphql(
       ` {
-         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2021-04-05", type: ISSUE, last: 100) {
+         search(query: "repo:KoganShuko/Happy-runner is:pr created:>2021-04-04", type: ISSUE, last: 100) {
            edges {
              node {
                ... on PullRequest {
