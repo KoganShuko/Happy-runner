@@ -36,6 +36,7 @@ const config_namespaceObject = JSON.parse("{\"reviewers\":[{\"name\":\"KoganShuk
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
+    const owner = core.getInput('owner');
     const headers =  {
       headers: {
         authorization: `token ${token}`,
@@ -131,11 +132,14 @@ async function getRandomReviewer() {
         reviewCount: tempBalancer[reviewer.name].reviewCount,
         isActive: tempBalancer[reviewer.name].isActive,
       }
-    })
+    }).filter((data) => {
+      return data.isActive && data.name !== owner;
+    }).sort((prev, cur) => {
+      return prev.reviewCount - cur.reviewCount;
+    });
 
     console.log(updatedReviewerData, 'lala')
 
-console.log(tempBalancer);
   
   } catch (e) {
     core.setFailed(e);
