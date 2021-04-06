@@ -104,7 +104,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    console.log(pullsRequests.search.edges)
+    console.log(pullsRequests.search.edges[0].node.reviewRequests)
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
