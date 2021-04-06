@@ -28,8 +28,7 @@ const reviewers = [
     slackId: 'U01KFVAEB09',
   },
   {
-    /* name: 'testUCHI', */
-    name: 'Hiker-Hope',
+    name: 'testUchi',
     slackId: 'U01DN1LAUUQ',
   },
   {
@@ -74,7 +73,7 @@ async function getRandomReviewer() {
       },
     };
     const repoName = github.context.payload.repository.name;
-    const repoOwner = github.context.payload.repository.owner.name;
+    const repoOwner = github.context.payload.repository.owner.login;
     const pullRequestOwner = github.context.actor;
 
     const date = new Date();
@@ -105,7 +104,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    console.log(pullsRequests)
+    console.log(github.context.payload.repository)
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 

@@ -1,23 +1,14 @@
 name: Get random reviewer
 description: Get random reviewer based on review count
 inputs:
-  storageId:
-    description: json storage id of reviewers data
-    required: true
-  storageToken:
-    description: token for storage
-    required: true
-  owner:
-    description: pull request owner
-    required: true
   token:
-    description: lala
+    description: GITHUB TOKEN
     required: true
 outputs:
   name:
     description: next reviewer
   slackId:
-    description: slack id
+    description: reviewer slack id
 runs:
   using: 'docker'
   image: 'Dockerfile'
