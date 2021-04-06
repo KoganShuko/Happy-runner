@@ -3,15 +3,15 @@ export const reviewers = [
     name: 'KoganShuko',
     slackId: 'UBK40QGRM',
   },
-  {
+/*   {
     name: 'egorov-staff-hub',
     slackId: 'U01KFVAEB09',
-  },
+  }, */
   {
     name: 'testUchi',
     slackId: 'U01DN1LAUUQ',
   },
-  {
+  /* {
     name: 'abstractmage',
     slackId: 'ULFHQLP6W',
   },
@@ -34,5 +34,5 @@ export const reviewers = [
   {
     name: 'alexeyivanov-web',
     slackId: 'U01FB27BCG3',
-  }
+  } */
 ];
