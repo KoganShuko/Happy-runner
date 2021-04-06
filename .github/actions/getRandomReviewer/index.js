@@ -44,7 +44,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    console.log(new Date(), new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}))
+    console.log(pullsRequests.search.edges)
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
