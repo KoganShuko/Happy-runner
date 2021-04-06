@@ -44,7 +44,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    console.log(github.context.payload.repository)
+    console.log(new Date(), new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}))
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
