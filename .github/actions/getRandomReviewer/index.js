@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import { graphql } from '@octokit/graphql';
 import * as github from '@actions/github';
 import { reviewers } from './config';
-
+// test
 async function getRandomReviewer() {
   try {
     const token = core.getInput('token');
