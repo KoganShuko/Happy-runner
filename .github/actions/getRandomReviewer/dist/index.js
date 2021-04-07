@@ -155,7 +155,9 @@ async function getRandomReviewer() {
 
     // подсчет ревью
     pullsRequests.search.edges.forEach((pull) => {
+      console.log(pull)
       pull.node.reviewRequests.nodes.forEach((review) => {
+        console.log(review)
         if (review) {
           const {
             requestedReviewer: { login },
