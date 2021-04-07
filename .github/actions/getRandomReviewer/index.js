@@ -126,31 +126,31 @@ async function getRandomReviewer() {
 
     // подсчет ревью
     pullsRequests.search.edges.forEach((pull) => {
+      // сделанные ревью
+      pull.node.reviews.nodes.forEach((review) => {
+        console.log('review',review)
+        if (review) {
+          const {
+            requestedReviewer: { author },
+          } = review;
+          if (tempBalancer[author]) {
+            tempBalancer[author].reviewCount += 1;
+          }
+        }
+      });
+      // открытые пр
       pull.node.reviewRequests.nodes.forEach((review) => {
         if (review) {
           const {
             requestedReviewer: { login },
           } = review;
-          if (tempBalancer[login] !== undefined) {
+          if (tempBalancer[login]) {
             tempBalancer[login].reviewCount += 1;
-            console.log(tempBalancer,'tempBalancer')
           }
         }
       });
       console.log('------------------------------')
-      pull.node.reviews.nodes.forEach((review) => {
-        console.log('review',review)
-        /* if (review) {
-          const {
-            requestedReviewer: { login },
-          } = review;
-          console.log(tempBalancer, tempBalancer[login], login, 'login')
-          if (tempBalancer[login] !== undefined) {
-            tempBalancer[login].reviewCount += 1;
-            console.log(tempBalancer,'tempBalancer')
-          }
-        } */
-      });
+      
     });
 
     await Promise.all(availabilityPromises);
