@@ -21,7 +21,7 @@ async function getRandomReviewer() {
 
     const pullsRequests = await graphql(
       ` {
-          search(query: "repo:${repoOwner}/${repoName} is:pr created:>=${dateISO}", type: ISSUE, last: 100) {
+          search(query: "repo:${repoOwner}/${repoName} is:pr created:>=2021-04-04", type: ISSUE, last: 100) {
             edges {
               node {
                 ... on PullRequest {
@@ -29,13 +29,14 @@ async function getRandomReviewer() {
                   reviewRequests(first: 100) {
                     nodes {
                       pullRequest {
-                        assignees(first: 10)  {
+                        latestReviews(first: 10) {
                           nodes {
-                            login
-                          } 
-                        }
-                        author {
-                          login
+                            author {
+                              ... on Actor {
+                                login
+                              }
+                            }
+                          }
                         }
                       }
                       requestedReviewer {
