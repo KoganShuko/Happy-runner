@@ -90,7 +90,9 @@ async function getRandomReviewer() {
                     nodes {
                       pullRequest {
                         assignees {
-                          login 
+                          node {
+                            login
+                          } 
                         }
                       }
                       requestedReviewer {
