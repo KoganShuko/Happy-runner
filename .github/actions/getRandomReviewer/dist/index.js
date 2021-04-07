@@ -86,6 +86,7 @@ async function getRandomReviewer() {
               node {
                 ... on PullRequest {
                   createdAt
+                  baseRefName
                   reviewRequests(first: 100) {
                     nodes {
                       pullRequest {
