@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { main } from './main';
-
+// test2
 import './index.scss';
 
 const app = new PIXI.Application({
