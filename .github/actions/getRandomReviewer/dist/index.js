@@ -139,8 +139,11 @@ async function getRandomReviewer() {
       `,
       headers
     );
-    pullsRequests.search.edges[0].node.reviewRequests.nodes.forEach((pull) => {
+    /* pullsRequests.search.edges[0].node.reviewRequests.nodes.forEach((pull) => {
       console.log(pull, pull.pullRequest.participants.nodes);
+    }) */
+    pullsRequests.search.edges.forEach((ed) => {
+      console.log(ed.node)
     })
     console.log('-----------------------------------')
     console.log(pullsRequests.search.edges)
