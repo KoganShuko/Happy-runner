@@ -39,7 +39,9 @@ async function getRandomReviewer() {
                         }
                         latestReviews {
                           nodes {
-                            login
+                            comments {
+                              author
+                            }
                           }
                         }
                       }
