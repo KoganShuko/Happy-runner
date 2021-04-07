@@ -163,7 +163,7 @@ async function getRandomReviewer() {
             requestedReviewer: { login },
           } = review;
           console.log(login,'login')
-          if (tempBalancer[login]) {
+          if (tempBalancer[login] !== undefined) {
             tempBalancer[login].reviewCount += 1;
             console.log(tempBalancer,'tempBalancer')
           }
