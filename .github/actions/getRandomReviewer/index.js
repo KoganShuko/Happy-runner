@@ -41,7 +41,9 @@ async function getRandomReviewer() {
                           nodes {
                             comments {
                               nodes{
-                                author
+                                author {
+                                  login
+                                }
                               }
                             }
                           }
