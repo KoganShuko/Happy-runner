@@ -88,6 +88,16 @@ async function getRandomReviewer() {
                   createdAt
                   reviewRequests(first: 100) {
                     nodes {
+                      pullRequest {
+                        assignees(first: 10)  {
+                          nodes {
+                            login
+                          } 
+                        }
+                        author {
+                          login
+                        }
+                      }
                       requestedReviewer {
                         ... on User {
                           login
@@ -104,7 +114,7 @@ async function getRandomReviewer() {
       headers
     );
 
-    console.log(pullsRequests.search.edges[0].node.reviewRequests)
+   // console.log(pullsRequests.search.edges[0].nodes.reviewRequests)
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
