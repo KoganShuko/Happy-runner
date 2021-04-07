@@ -97,19 +97,6 @@ async function getRandomReviewer() {
                         author {
                           login
                         }
-                        latestReviews {
-                          nodes {
-                            comments {
-                              nodes{
-                                author {
-                                  ... on Actor {
-                                    login
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
                       }
                       requestedReviewer {
                         ... on User {
