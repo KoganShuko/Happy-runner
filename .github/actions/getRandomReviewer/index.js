@@ -26,7 +26,7 @@ async function getRandomReviewer() {
               node {
                 ... on PullRequest {
                   createdAt
-                  headRef
+                  headRefName
                   participants(first: 10) {
                     nodes {
                       login
