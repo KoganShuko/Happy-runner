@@ -29,8 +29,8 @@ async function getRandomReviewer() {
                   reviewRequests(first: 100) {
                     nodes {
                       pullRequest {
-                        ... on User {
-                          login
+                        assignees {
+                          login 
                         }
                       }
                       requestedReviewer {
