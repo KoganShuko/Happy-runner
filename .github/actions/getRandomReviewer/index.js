@@ -29,10 +29,16 @@ async function getRandomReviewer() {
                   reviewRequests(first: 100) {
                     nodes {
                       pullRequest {
-                        assignees {
-                          node {
+                        assignees(first: 10)  {
+                          nodes {
                             login
                           } 
+                        }
+                        author
+                        latestReviews {
+                          nodes {
+                            login
+                          }
                         }
                       }
                       requestedReviewer {
