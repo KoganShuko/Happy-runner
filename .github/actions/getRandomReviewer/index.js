@@ -79,15 +79,13 @@ async function getRandomReviewer() {
       `,
       headers
     );
-    /* pullsRequests.search.edges[0].node.reviewRequests.nodes.forEach((pull) => {
-      console.log(pull, pull.pullRequest.participants.nodes);
-    }) */
-    pullsRequests.search.edges.forEach((ed) => {
+  
+ /*    pullsRequests.search.edges.forEach((ed) => {
       console.log(ed.node)
       console.log(ed.node.participants.nodes)
     })
     console.log('-----------------------------------')
-    console.log(pullsRequests.search.edges)
+    console.log(pullsRequests.search.edges) */
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
@@ -128,10 +126,21 @@ async function getRandomReviewer() {
 
     // подсчет ревью
     pullsRequests.search.edges.forEach((pull) => {
-      console.log('pull',pull)
       pull.node.reviewRequests.nodes.forEach((review) => {
-        console.log('review',review)
         if (review) {
+          const {
+            requestedReviewer: { login },
+          } = review;
+          if (tempBalancer[login] !== undefined) {
+            tempBalancer[login].reviewCount += 1;
+            console.log(tempBalancer,'tempBalancer')
+          }
+        }
+      });
+      console.log('------------------------------')
+      pull.node.reviews.nodes.forEach((review) => {
+        console.log('review',review)
+        /* if (review) {
           const {
             requestedReviewer: { login },
           } = review;
@@ -140,7 +149,7 @@ async function getRandomReviewer() {
             tempBalancer[login].reviewCount += 1;
             console.log(tempBalancer,'tempBalancer')
           }
-        }
+        } */
       });
     });
 
