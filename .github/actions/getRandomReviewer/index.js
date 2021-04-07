@@ -26,7 +26,26 @@ async function getRandomReviewer() {
               node {
                 ... on PullRequest {
                   createdAt
-                  baseRefName
+                  headRef
+                  participants(first: 10) {
+                    nodes {
+                      login
+                    }
+                  }
+                  reviews {
+                    nodes {
+                      editor {
+                        ... on Actor {
+                          login
+                        }
+                      }
+                      author {
+                        ... on Actor {
+                          login
+                        }
+                      }
+                    }
+                  }
                   reviewRequests(first: 100) {
                     nodes {
                       pullRequest {
