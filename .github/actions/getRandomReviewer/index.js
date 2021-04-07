@@ -32,7 +32,7 @@ async function getRandomReviewer() {
                       login
                     }
                   }
-                  reviews {
+                  reviews(first: 10) {
                     nodes {
                       editor {
                         ... on Actor {
