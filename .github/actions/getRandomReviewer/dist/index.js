@@ -94,7 +94,9 @@ async function getRandomReviewer() {
                             login
                           } 
                         }
-                        author
+                        author {
+                          login
+                        }
                         latestReviews {
                           nodes {
                             login
