@@ -40,7 +40,9 @@ async function getRandomReviewer() {
                         latestReviews {
                           nodes {
                             comments {
-                              author
+                              nodes{
+                                author
+                              }
                             }
                           }
                         }
