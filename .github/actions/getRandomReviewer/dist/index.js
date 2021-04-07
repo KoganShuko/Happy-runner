@@ -102,7 +102,9 @@ async function getRandomReviewer() {
                             comments {
                               nodes{
                                 author {
-                                  login
+                                  ... on Actor {
+                                    login
+                                  }
                                 }
                               }
                             }
