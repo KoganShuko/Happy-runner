@@ -60,7 +60,7 @@ async function getRandomReviewer() {
       headers
     );
     pullsRequests.search.edges[0].node.reviewRequests.nodes.forEach((pull) => {
-      console.log(pull, pull.participants.nodes);
+      console.log(pull, pull.pullRequest.participants.nodes);
     })
     console.log('-----------------------------------')
     // для подсчета кол-ва ревью
