@@ -190,9 +190,7 @@ async function getRandomReviewer() {
       pull.node.reviews.nodes.forEach((review) => {
         console.log('review',review)
         if (review) {
-          const {
-            requestedReviewer: { author },
-          } = review;
+          const { author } = review;
           if (tempBalancer[author]) {
             tempBalancer[author].reviewCount += 1;
           }
