@@ -98,6 +98,11 @@ async function getRandomReviewer() {
                             }
                           }
                         }
+                        participants(first: 10) {
+                          nodes {
+                            login
+                          }
+                        }
                       }
                       requestedReviewer {
                         ... on User {
@@ -114,8 +119,10 @@ async function getRandomReviewer() {
       `,
       headers
     );
-
-    console.log(pullsRequests.search.edges[0].node.reviewRequests.nodes[0].pullRequest, pullsRequests.search.edges[0].node.reviewRequests.nodes[0].requestedReviewer)
+    pullsRequests.search.edges[0].node.reviewRequests.nodes.forEach((pull) => {
+      console.log(pull);
+    })
+    console.log('-----------------------------------')
     // для подсчета кол-ва ревью
     const tempBalancer = {};
 
