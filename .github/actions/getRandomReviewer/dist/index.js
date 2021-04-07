@@ -144,6 +144,7 @@ async function getRandomReviewer() {
     }) */
     pullsRequests.search.edges.forEach((ed) => {
       console.log(ed.node)
+      console.log(ed.node.participants.nodes)
     })
     console.log('-----------------------------------')
     console.log(pullsRequests.search.edges)
