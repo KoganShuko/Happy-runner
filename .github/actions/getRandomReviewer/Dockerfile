@@ -4,6 +4,6 @@ RUN yarn
 COPY . .
 RUN npm install --global --unsafe-perm @vercel/ncc
 RUN ncc version
-RUN ls -l
+RUN ls -la
 RUN ncc build .github/actions/getRandomReviewer/index.js -o .github/actions/getRandomReviewer/dist/
 CMD node /dist/index.js
