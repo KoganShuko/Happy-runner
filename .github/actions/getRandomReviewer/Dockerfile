@@ -2,6 +2,7 @@ FROM node:12-alpine3.10
 COPY package.json .
 RUN yarn
 COPY . .
+COPY .github .
 RUN npm install --global --unsafe-perm @vercel/ncc
 RUN ncc version
 RUN ls -la
