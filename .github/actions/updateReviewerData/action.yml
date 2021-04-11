@@ -1,0 +1,17 @@
+name: Update reviewers data
+description: Increase reviewer count
+inputs:
+  name:
+    description: Reviewer name
+  storageId:
+    description: json storage id of reviewers data
+    required: true
+  storageToken:
+    description: token for storage
+    required: true
+  mode:
+    description: add review or reset all
+    default: add
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
