@@ -2,11 +2,12 @@ name: Reviewer auto assign
 
 on:
   pull_request:
-    types: [open]
+    types: [opened]
 
 jobs:
   autoAssign:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/getRandomReviewer
