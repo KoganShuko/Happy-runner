@@ -1,0 +1,14 @@
+name: Get random reviewer
+description: Get random reviewer based on review count
+inputs:
+  token:
+    description: GITHUB TOKEN
+    required: true
+outputs:
+  name:
+    description: next reviewer
+  slackId:
+    description: reviewer slack id
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

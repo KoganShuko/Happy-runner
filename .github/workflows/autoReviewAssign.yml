@@ -1,0 +1,21 @@
+name: Reviewer auto assign
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  autoAssign:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/getRandomReviewer
+        id: getReviewer
+        with:
+          owner: ${{ github.actor }}
+          storageId: 60649e82418f307e2586232e
+          storageToken: $2b$10$qsCWWMT5m/vE5SUtC5Qfx.QAliFQad8Soz7lkl4MCBeRXKIM.Hsau
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo 'AAAAAAAAAA'
+     
